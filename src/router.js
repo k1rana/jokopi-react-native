@@ -11,15 +11,15 @@ const WelcomeStack = () => {
   return (
     <Navigator>
       <Screen
-        name="Login"
-        component={Login}
+        name="Welcome"
+        component={Welcome}
         options={{
           headerShown: false,
         }}
       />
       <Screen
-        name="Welcome"
-        component={Welcome}
+        name="Login"
+        component={Login}
         options={{
           headerShown: false,
         }}

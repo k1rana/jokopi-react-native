@@ -1,21 +1,19 @@
 import React from 'react';
 
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
 
 const Welcome = () => {
   const navigation = useNavigation();
   return (
-    <View style={{flex: 1, padding: 10, backgroundColor: '#F2F2F2'}}>
-      <Text style={{fontSize: 40, color: 'black', fontWeight: 700}}>
-        Coffee for Everyone
-      </Text>
+    <View
+      style={{
+        flex: 1,
+        padding: 10,
+        backgroundColor: '#F2F2F2',
+      }}>
+      <Text style={styles.textTitle}>Coffee for Everyone</Text>
 
       <Pressable
         style={styles.homeBtn}
@@ -37,5 +35,12 @@ const styles = StyleSheet.create({
   },
   homeBtnText: {
     color: '#FFF',
+  },
+  textTitle: {
+    fontFamily: 'Poppins',
+    letterSpacing: -2,
+    fontSize: 40,
+    color: 'black',
+    fontWeight: 700,
   },
 });
