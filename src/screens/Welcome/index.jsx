@@ -1,26 +1,27 @@
 import React from 'react';
 
+import {styled} from 'nativewind';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
 
+const StyledView = styled(View);
+const StyledText = styled(Text);
+
 const Welcome = () => {
   const navigation = useNavigation();
   return (
-    <View
-      style={{
-        flex: 1,
-        padding: 10,
-        backgroundColor: '#F2F2F2',
-      }}>
+    <StyledView className="font-bold px-2">
       <Text style={styles.textTitle}>Coffee for Everyone</Text>
-
+      <StyledText className="font-bold text-slate-900">
+        Halo selamat datang!
+      </StyledText>
       <Pressable
         style={styles.homeBtn}
         onPress={() => navigation.navigate('Login')}>
         <Text style={styles.homeBtnText}>Login</Text>
       </Pressable>
-    </View>
+    </StyledView>
   );
 };
 
