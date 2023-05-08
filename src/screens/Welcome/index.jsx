@@ -10,8 +10,8 @@ const Welcome = () => {
   return (
     <View className="flex-1 justify-center items-center font-bold px-7 py-2">
       <Text
-        style={{fontSize: 70, lineHeight: 80}}
-        className="font-global text-black tracking-[-2] font-bold w-full mb-4">
+        style={{fontSize: 70, lineHeight: 80, letterSpacing: -3}}
+        className="font-global text-black font-bold w-full mb-4">
         Coffee for Everyone
       </Text>
       <WelcomeImage width={600} height={400} />
