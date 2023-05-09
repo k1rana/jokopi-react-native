@@ -1,14 +1,9 @@
 import axios from 'axios';
 
-import APP_HOST from '@env';
+import {APP_HOST} from '@env';
 
-const api = () => {
-  return axios.create({
-    baseURL: APP_HOST,
-    headers: {
-      Authorization: `Bearer ${APP_HOST}`,
-    },
-  });
-};
+const api = axios.create({
+  baseURL: APP_HOST,
+});
 
 export default api;

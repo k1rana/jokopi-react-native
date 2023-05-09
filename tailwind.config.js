@@ -11,6 +11,8 @@ module.exports = {
         'secondary-focus': '#f4a200',
         drawer: '#F2F2F2',
         quaternary: '#0b132a',
+        error: '#D16B55',
+        success: '#2FB390',
       },
       boxShadow: {
         'home-products': '0px 30px 60px #3939391A',
