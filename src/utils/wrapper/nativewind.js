@@ -6,6 +6,7 @@ import {
   ScrollView as OriginScrollView,
   Text as OriginText,
   TextInput as OriginTextInput,
+  TouchableOpacity as OriginTouchableOpacity,
   View as OriginView,
 } from 'react-native';
 import {
@@ -24,3 +25,4 @@ export const RectButton = styled(OriginRectButton);
 export const BaseButton = styled(OriginBaseButton);
 export const TextInput = styled(OriginTextInput);
 export const ActivityIndicator = styled(OriginActivityIndicator);
+export const TouchableOpacity = styled(OriginTouchableOpacity);

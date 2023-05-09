@@ -1,7 +1,11 @@
 import api from './base';
 
-export const login = () => {
-  return api.post('/auth/login');
+export const login = ({email, password}, controller) => {
+  return api.post(
+    '/apiv1/auth/login',
+    {email, password, rememberMe: true},
+    {signal: controller.signal},
+  );
 };
 
 export const register = ({email, password, phone_number}, controller) => {
@@ -9,6 +13,10 @@ export const register = ({email, password, phone_number}, controller) => {
   return api.post('/apiv1/auth/register', body, {signal: controller.signal});
 };
 
-export const requestResetPass = () => {
-  return api.post('/auth/login');
+export const requestResetPass = (email, controller) => {
+  return api.post(
+    '/apiv1/auth/forgotPass/',
+    {email},
+    {signal: controller.signal},
+  );
 };
