@@ -13,6 +13,7 @@ import {
   BaseButton as OriginBaseButton,
   FlatList as OriginFlatList,
   RectButton as OriginRectButton,
+  Swipeable as OriginSwipable,
 } from 'react-native-gesture-handler';
 
 export const Text = styled(OriginText);
@@ -26,3 +27,4 @@ export const BaseButton = styled(OriginBaseButton);
 export const TextInput = styled(OriginTextInput);
 export const ActivityIndicator = styled(OriginActivityIndicator);
 export const TouchableOpacity = styled(OriginTouchableOpacity);
+export const Swipable = styled(OriginSwipable);

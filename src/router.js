@@ -12,6 +12,10 @@ import ForgotPass from './screens/Auth/ForgotPass';
 import Login from './screens/Auth/Login';
 import Register from './screens/Auth/Register';
 import Home from './screens/Home';
+import ProductList from './screens/Product';
+import Cart from './screens/Product/Cart';
+import ProductDetail from './screens/Product/Detail';
+import DeliveryMethod from './screens/Transaction/DeliveryMethod';
 import Welcome from './screens/Welcome';
 import {
   persistor,
@@ -30,7 +34,6 @@ function MyDrawer() {
       }}
       drawerContent={DrawerContent}>
       <Drawer.Screen name="Home" component={Home} />
-      <Drawer.Screen name="Login" component={Login} />
     </Drawer.Navigator>
   );
 }
@@ -38,37 +41,19 @@ const WelcomeStack = () => {
   const {Navigator, Screen} = createStackNavigator();
   return (
     <Navigator screenOptions={{headerShown: false}}>
-      <Screen
-        name="Welcome"
-        component={Welcome}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Screen
-        name="Login"
-        component={Login}
-        options={{
-          headerShown: false,
-        }}
-      />
+      <Screen name="Welcome" component={Welcome} />
 
-      <Screen
-        name="Register"
-        component={Register}
-        options={{
-          headerShown: false,
-        }}
-      />
+      <Screen name="Login" component={Login} />
+      <Screen name="Register" component={Register} />
+
+      <Screen name="ProductList" component={ProductList} />
+      <Screen name="ProductDetail" component={ProductDetail} />
+
+      <Screen name="Cart" component={Cart} />
+      <Screen name="DeliveryMethod" component={DeliveryMethod} />
 
       <Screen name="ForgotPass" component={ForgotPass} />
-      <Screen
-        name="MyDrawer"
-        component={MyDrawer}
-        options={{
-          headerShown: false,
-        }}
-      />
+      <Screen name="MyDrawer" component={MyDrawer} />
     </Navigator>
   );
 };

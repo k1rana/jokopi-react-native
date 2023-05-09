@@ -1,10 +1,18 @@
-import React from 'react';
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+
+import {useNavigation} from '@react-navigation/native';
 
 import BurgerIcon from '../../assets/icons/burger-drawer.svg';
 import CartIcon from '../../assets/icons/cart.svg';
 import ChatIcon from '../../assets/icons/chat.svg';
 import SearchIcon from '../../assets/icons/search.svg';
 import productPlaceholder from '../../assets/images/product-placeholder.png';
+import {n_f} from '../../utils/helpers';
+import {getProducts} from '../../utils/https/product';
 import {
   FlatList,
   Image,
@@ -15,6 +23,21 @@ import {
 } from '../../utils/wrapper/nativewind';
 
 const Home = ({navigation}) => {
+  const nav = useNavigation();
+  const controller = useMemo(() => new AbortController(), []);
+
+  const [favorite, setFavorite] = useState([]);
+
+  useEffect(() => {
+    getProducts({orderBy: ''}, controller)
+      .then(result => {
+        setFavorite(result.data.data);
+        // console.log(result.data.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, []);
   return (
     <>
       <View className="px-8 bg-drawer py-6 flex-row justify-between">
@@ -28,7 +51,7 @@ const Home = ({navigation}) => {
           <Pressable onPress={() => navigation.openDrawer()}>
             <SearchIcon width={25} height={25} />
           </Pressable>
-          <Pressable onPress={() => navigation.openDrawer()}>
+          <Pressable onPress={() => nav.navigate('Cart')}>
             <CartIcon width={25} height={25} />
           </Pressable>
         </View>
@@ -48,29 +71,34 @@ const Home = ({navigation}) => {
           </Pressable>
         </View>
         <FlatList
-          data={['', '', '', '', '', '']}
+          data={favorite}
           className="flex-row px-6 flex-none bg-drawer"
           horizontal
           view
           showsHorizontalScrollIndicator={false}
-          renderItem={items => (
-            <View className="block relative items-center w-[220px] py-2 mx-6 rounded-lg justify-center">
+          renderItem={({item}) => (
+            <Pressable
+              className="block relative items-center w-[220px] py-2 mx-6 rounded-lg justify-center"
+              onPress={() =>
+                nav.navigate('ProductDetail', {product_id: item.id})
+              }>
               <View className="w-[180] h-[180] aspect-square bg-transparent -mb-32 relative z-20 rounded-xl  justify-center">
                 <Image
-                  source={productPlaceholder}
+                  source={item.img ? {uri: item.img} : productPlaceholder}
+                  loadingIndicatorSource={productPlaceholder}
                   style={{width: 180, height: 180, resizeMode: 'cover'}}
                   className="rounded-2xl"
                 />
               </View>
-              <View className="bg-white items-center w-[220px] pt-36 pb-5 z-10  rounded-3xl gap-y-1  shadow-home-products">
+              <View className="bg-white items-center w-[220] h-[250] pt-36 pb-5 z-10  rounded-3xl gap-y-1  shadow-home-products justify-between">
                 <Text className="font-global text-black min-h-[] text-xl font-bold text-center max-w-[150]">
-                  Hazelnut Latte
+                  {item.name}
                 </Text>
                 <Text className="font-global text-primary text-lg font-bold text-center">
-                  IDR 30.000
+                  IDR {n_f(item.price)}
                 </Text>
               </View>
-            </View>
+            </Pressable>
           )}
           nestedScrollEnabled></FlatList>
 
@@ -91,7 +119,9 @@ const Home = ({navigation}) => {
           view
           showsHorizontalScrollIndicator={false}
           renderItem={items => (
-            <View className="block relative items-center w-[220px] py-2 mx-6 rounded-lg justify-center">
+            <Pressable
+              className="block relative items-center w-[220px] py-2 mx-6 rounded-lg justify-center"
+              onPress={() => nav.navigate('ProductDetail', {product_id: '2'})}>
               <View className="w-[180] h-[180] aspect-square bg-transparent -mb-32 relative z-20 rounded-xl  justify-center">
                 <Image
                   source={productPlaceholder}
@@ -107,7 +137,7 @@ const Home = ({navigation}) => {
                   IDR 30.000
                 </Text>
               </View>
-            </View>
+            </Pressable>
           )}
           nestedScrollEnabled></FlatList>
       </ScrollView>
