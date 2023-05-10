@@ -1,4 +1,7 @@
-import React, {useEffect} from 'react';
+import React, {
+  useEffect,
+  useMemo,
+} from 'react';
 
 import {
   useDispatch,
@@ -49,6 +52,7 @@ const Cart = () => {
   const cart = useSelector(state => state.cart);
   const dispatch = useDispatch();
   const price = useSelector(state => state.price);
+  const controller = useMemo(() => new AbortController(), []);
   const nav = useNavigation();
   useEffect(() => {
     if (!price.isFulfilled) {

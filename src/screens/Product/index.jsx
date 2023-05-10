@@ -15,6 +15,7 @@ import {useNavigation} from '@react-navigation/native';
 import BackIcon from '../../assets/icons/arrow-left-black.svg';
 import FilterIcon from '../../assets/icons/filter.svg';
 import productPlaceholder from '../../assets/images/product-placeholder.png';
+import {priceActions} from '../../store/slices/price.slice';
 import {n_f} from '../../utils/helpers';
 import {getProducts} from '../../utils/https/product';
 import {
@@ -74,6 +75,10 @@ const ProductList = () => {
         console.log(err);
       });
   }, [filters.category]);
+  const sorts = [
+    {orderBy: 'price', sort: 'asc', name: 'Price (Low to High)'},
+    {orderBy: 'price', sort: 'desc', name: 'Price (High to Low)'},
+  ];
 
   return (
     <Drawer
@@ -81,8 +86,31 @@ const ProductList = () => {
       onOpen={() => setOpen(true)}
       onClose={() => setOpen(false)}
       drawerPosition="right"
+      drawerStyle={{width: '90%'}}
       renderDrawerContent={() => {
-        return <Text>Drawer content</Text>;
+        return (
+          <View className="flex-1">
+            <View className="bg-[#EEEEEE] py-2 px-3 mb-5">
+              <Text className="font-global text-black text-lg font-semibold">
+                Sort
+              </Text>
+            </View>
+            <FlatList
+              data={sorts}
+              numColumns={2}
+              keyExtractor={item => `${item.orderBy}-${item.sort}`}
+              className="gap-y-2"
+              renderItem={({item}) => (
+                <View className="w-[50%] items-center">
+                  <Pressable className="items-center bg-[#EEEEEE] w-[90%] p-2">
+                    <Text className="font-global text-black text-center">
+                      {item.name}
+                    </Text>
+                  </Pressable>
+                </View>
+              )}></FlatList>
+          </View>
+        );
       }}>
       <View className="flex-1 bg-[#EEEEEE]">
         <View className="px-8 py-4 flex-row justify-between items-center">
