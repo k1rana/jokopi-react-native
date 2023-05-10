@@ -1,8 +1,19 @@
-import React, {useState} from 'react';
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
 
 import {useNavigation} from '@react-navigation/native';
 
 import BackIcon from '../../assets/icons/arrow-left-black.svg';
+import {cartActions} from '../../store/slices/cart.slice';
+import {priceActions} from '../../store/slices/price.slice';
 import {n_f} from '../../utils/helpers';
 import {
   Pressable,
@@ -13,14 +24,54 @@ import {
 } from '../../utils/wrapper/nativewind';
 
 const DeliveryMethod = () => {
+  const price = useSelector(state => state.price);
+  const cart = useSelector(state => state.cart);
+  const dispatch = useDispatch();
+  const controller = useMemo(() => new AbortController(), []);
   const nav = useNavigation();
-  const [methodSelected, setMethod] = useState('');
+
+  const [details, setDetails] = useState({
+    address: cart.delivery_address,
+    notes: cart.notes,
+  });
+
+  useEffect(() => {
+    if (!price.isFulfilled) {
+      dispatch(priceActions.getPriceBySize({controller}));
+    }
+  }, []);
+  const [methodSelected, setMethod] = useState(cart.delivery_id);
 
   const methods = [
-    {id: '1', name: 'Door delivery'},
-    {id: '2', name: 'Pick up at store'},
-    {id: '3', name: 'Dine in'},
+    {id: '1', name: 'Door delivery', fee: 10000},
+    {id: '2', name: 'Pick up at store', fee: 0},
+    {id: '3', name: 'Dine in', fee: 0},
   ];
+
+  const totalPrice =
+    cart.list.reduce(
+      (accumulator, currentItem) =>
+        accumulator +
+        currentItem.price *
+          (price.isFulfilled && currentItem.size_id !== ''
+            ? price.data[
+                price.data.findIndex(x => x.id === Number(currentItem.size_id))
+              ].price
+            : 1) *
+          currentItem.qty,
+      0,
+    ) + (methodSelected && methods[methodSelected - 1].fee);
+
+  const handleButton = () => {
+    nav.navigate('Payment');
+    dispatch(
+      cartActions.setDelivery({
+        delivery_id: methodSelected,
+        delivery_address: details.address,
+        notes: details.notes,
+      }),
+    );
+  };
 
   return (
     <View className="flex-1 bg-[#F2F2F2]">
@@ -48,14 +99,17 @@ const DeliveryMethod = () => {
         </View>
         <View className="bg-white rounded-2xl px-4 py-4">
           <TextInput
-            value="Iskandar Street"
+            value={details.address}
+            onChange={e =>
+              setDetails({...details, address: e.nativeEvent.text})
+            }
             className="font-global text-black py-1 font-medium text-base border-b border-[#BABABA]"
           />
           <TextInput
             multiline
             numberOfLines={2}
-            value="Km 5 refinery road oppsite re
-public road, effurun, Jakarta"
+            value={details.notes}
+            onChange={e => setDetails({...details, notes: e.nativeEvent.text})}
             className="font-global text-black py-1 text-base border-b border-[#BABABA]"
           />
           <TextInput
@@ -114,12 +168,15 @@ public road, effurun, Jakarta"
         <View className="flex-row justify-between">
           <Text className="font-global text-black text-base">Total</Text>
           <Text className="font-global text-black text-xl font-bold">
-            IDR {n_f(125000)}
+            IDR {n_f(totalPrice)}
           </Text>
         </View>
         <TouchableOpacity
-          onPress={() => nav.navigate('DeliveryMethod')}
-          className={` bg-[#6A4029] py-5 rounded-2xl w-full flex-row justify-center mt-6`}>
+          onPress={handleButton}
+          disabled={methodSelected === ''}
+          className={`${
+            methodSelected !== '' ? `bg-[#6A4029]` : 'bg-gray-300'
+          }  py-5 rounded-2xl w-full flex-row justify-center mt-6`}>
           <Text
             className={`font-global text-center text-white text-base font-bold `}>
             Proceed to payment

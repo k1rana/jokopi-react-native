@@ -2,8 +2,10 @@ import {createSlice} from '@reduxjs/toolkit';
 
 const initialState = {
   list: [],
-  paymentMethod: '1',
-  deliveryMethod: '',
+  payment_id: '',
+  delivery_id: '',
+  delivery_address: '',
+  notes: '',
 };
 
 const cartSlice = createSlice({
@@ -91,6 +93,17 @@ const cartSlice = createSlice({
             item.size_id === action.payload.size_id
           );
         }),
+      };
+    },
+    resetCart: (prevState, action) => {
+      return {...prevState, ...initialState};
+    },
+    setDelivery: (prevState, action) => {
+      return {
+        ...prevState,
+        delivery_id: action.payload.delivery_id,
+        delivery_address: action.payload.delivery_address,
+        notes: action.payload.delivery_address,
       };
     },
   },

@@ -16,6 +16,7 @@ import ProductList from './screens/Product';
 import Cart from './screens/Product/Cart';
 import ProductDetail from './screens/Product/Detail';
 import DeliveryMethod from './screens/Transaction/DeliveryMethod';
+import Payment from './screens/Transaction/Payment';
 import Welcome from './screens/Welcome';
 import {
   persistor,
@@ -51,6 +52,7 @@ const WelcomeStack = () => {
 
       <Screen name="Cart" component={Cart} />
       <Screen name="DeliveryMethod" component={DeliveryMethod} />
+      <Screen name="Payment" component={Payment} />
 
       <Screen name="ForgotPass" component={ForgotPass} />
       <Screen name="MyDrawer" component={MyDrawer} />
