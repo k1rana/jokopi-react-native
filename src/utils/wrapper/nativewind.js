@@ -1,6 +1,7 @@
 import {styled} from 'nativewind';
 import {
   ActivityIndicator as OriginActivityIndicator,
+  Button as OriginButton,
   Image as OriginImage,
   Pressable as OriginPressable,
   ScrollView as OriginScrollView,
@@ -21,6 +22,7 @@ export const View = styled(OriginView);
 export const Pressable = styled(OriginPressable);
 export const ScrollView = styled(OriginScrollView);
 export const Image = styled(OriginImage);
+export const Button = styled(OriginButton);
 export const FlatList = styled(OriginFlatList);
 export const RectButton = styled(OriginRectButton);
 export const BaseButton = styled(OriginBaseButton);

@@ -18,6 +18,7 @@ import {
 import BackIcon from '../../assets/icons/arrow-left.svg';
 import CartIcon from '../../assets/icons/cart-white.svg';
 import {cartActions} from '../../store/slices/cart.slice';
+import {priceActions} from '../../store/slices/price.slice';
 import {n_f} from '../../utils/helpers';
 import {getProductById} from '../../utils/https/product';
 import {
@@ -44,7 +45,7 @@ const ProductDetail = () => {
     category_name: '',
   });
 
-  const cart = useSelector(state => state.cart);
+  const price = useSelector(state => state.price);
 
   const dispatch = useDispatch();
 
@@ -54,6 +55,9 @@ const ProductDetail = () => {
   const controller = useMemo(() => new AbortController(), []);
 
   useEffect(() => {
+    if (!price.isFulfilled) {
+      dispatch(priceActions.getPriceBySize({controller}));
+    }
     getProductById(product_id, controller)
       .then(result => {
         // console.log(result.data.data[0]);
@@ -62,7 +66,7 @@ const ProductDetail = () => {
       .catch(err => {
         console.log(err);
       });
-  });
+  }, []);
 
   const addCart = () => {
     dispatch(
@@ -97,7 +101,13 @@ const ProductDetail = () => {
       <View className="flex-1 flex-row justify-between items-end px-6 relative z-10">
         <View className="  bg-secondary  rounded-t-3xl px-2 py-3">
           <Text className=" text-black font-global font-bold text-2xl min-w-[115] max-w-[115] text-center">
-            {n_f(data.price)}
+            {n_f(
+              data.price *
+                (price.isFulfilled && size !== ''
+                  ? price.data[price.data.findIndex(x => x.id === Number(size))]
+                      .price
+                  : 1),
+            )}
           </Text>
         </View>
         <Image

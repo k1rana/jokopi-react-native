@@ -4,6 +4,11 @@ import React, {
   useState,
 } from 'react';
 
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+
 import {useNavigation} from '@react-navigation/native';
 
 import BurgerIcon from '../../assets/icons/burger-drawer.svg';
@@ -11,6 +16,7 @@ import CartIcon from '../../assets/icons/cart.svg';
 import ChatIcon from '../../assets/icons/chat.svg';
 import SearchIcon from '../../assets/icons/search.svg';
 import productPlaceholder from '../../assets/images/product-placeholder.png';
+import {priceActions} from '../../store/slices/price.slice';
 import {n_f} from '../../utils/helpers';
 import {getProducts} from '../../utils/https/product';
 import {
@@ -25,10 +31,16 @@ import {
 const Home = ({navigation}) => {
   const nav = useNavigation();
   const controller = useMemo(() => new AbortController(), []);
+  const price = useSelector(state => state.price);
+  const dispatch = useDispatch();
 
   const [favorite, setFavorite] = useState([]);
 
   useEffect(() => {
+    if (!price.isFulfilled) {
+      dispatch(priceActions.getPriceBySize(controller));
+    }
+
     getProducts({orderBy: ''}, controller)
       .then(result => {
         setFavorite(result.data.data);
@@ -48,7 +60,7 @@ const Home = ({navigation}) => {
           <Pressable onPress={() => navigation.openDrawer()}>
             <ChatIcon width={25} height={25} />
           </Pressable>
-          <Pressable onPress={() => navigation.openDrawer()}>
+          <Pressable onPress={() => nav.navigate('ProductList')}>
             <SearchIcon width={25} height={25} />
           </Pressable>
           <Pressable onPress={() => nav.navigate('Cart')}>
@@ -64,7 +76,9 @@ const Home = ({navigation}) => {
           <Text className="font-global text-primary font-bold text-xl">
             Favorite Products
           </Text>
-          <Pressable className="font-global pb-4">
+          <Pressable
+            className="font-global pb-4"
+            onPress={() => nav.navigate('ProductList')}>
             <Text className="font-global text-primary text-right">
               See more
             </Text>
@@ -106,7 +120,9 @@ const Home = ({navigation}) => {
           <Text className="font-global text-primary font-bold text-xl">
             Promo for you
           </Text>
-          <Pressable className="font-global">
+          <Pressable
+            className="font-global"
+            onPress={() => nav.navigate('ProductList')}>
             <Text className="font-global text-primary text-right">
               See more
             </Text>

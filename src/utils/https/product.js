@@ -5,7 +5,14 @@ export const getProductById = (product_id, controller) => {
 };
 
 export const getProducts = (
-  {orderBy = 'id', sort = 'asc', searchByName = '', limit = 8, page = 1},
+  {
+    orderBy = 'id',
+    sort = 'asc',
+    searchByName = '',
+    limit = 8,
+    page = 1,
+    category = '',
+  },
   controller,
 ) => {
   const params = {
@@ -14,6 +21,11 @@ export const getProducts = (
     searchByName,
     limit,
     page,
+    category,
   };
   return api.get(`/apiv1/products/`, {params, signal: controller.signal});
+};
+
+export const getSizePrice = controller => {
+  return api.get(`/apiv1/products/prices`, {signal: controller.signal});
 };

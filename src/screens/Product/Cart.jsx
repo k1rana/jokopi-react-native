@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import {
   useDispatch,
@@ -13,6 +13,7 @@ import SwipeIcon from '../../assets/icons/swipe.svg';
 import WishlistIcon from '../../assets/icons/wishlist-black.svg';
 import CartIcon from '../../assets/illustrations/wishlist.svg';
 import {cartActions} from '../../store/slices/cart.slice';
+import {priceActions} from '../../store/slices/price.slice';
 // import CartAction from '../../components/CartAction';
 import {
   n_f,
@@ -47,7 +48,13 @@ const CartAction = ({onDelete, onStar}) => {
 const Cart = () => {
   const cart = useSelector(state => state.cart);
   const dispatch = useDispatch();
+  const price = useSelector(state => state.price);
   const nav = useNavigation();
+  useEffect(() => {
+    if (!price.isFulfilled) {
+      dispatch(priceActions.getPriceBySize({controller}));
+    }
+  }, []);
   return (
     <View className="flex-1 bg-[#ECECEC]">
       <View className="px-10 py-6 flex-row justify-between items-center">
@@ -98,7 +105,18 @@ const Cart = () => {
                     {sizeName(item.size_id)} ({sizeLongName(item.size_id)})
                   </Text>
                   <Text className="font-global text-primary text-base">
-                    IDR {n_f(item.price)}
+                    IDR{' '}
+                    {n_f(
+                      item.price *
+                        (price.isFulfilled && item.size_id !== ''
+                          ? price.data[
+                              price.data.findIndex(
+                                x => x.id === Number(item.size_id),
+                              )
+                            ].price
+                          : 1) *
+                        item.qty,
+                    )}
                   </Text>
                 </View>
                 <View className="absolute right-3 bottom-2 bg-primary flex-row items-center rounded-xl">
