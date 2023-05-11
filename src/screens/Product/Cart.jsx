@@ -152,7 +152,7 @@ const Cart = () => {
                     onPress={() =>
                       dispatch(
                         cartActions.incrementQty({
-                          id: item.id,
+                          product_id: item.product_id,
                           size_id: item.size_id,
                         }),
                       )

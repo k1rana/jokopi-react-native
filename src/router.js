@@ -18,6 +18,7 @@ import {
 } from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
+import ArrowIcon from './assets/icons/drawer/arrow.svg';
 import menuIcon from './assets/icons/drawer/menu.svg';
 import orderIcon from './assets/icons/drawer/order.svg';
 import privacyIcon from './assets/icons/drawer/privacy-policy.svg';
@@ -42,7 +43,9 @@ import {
   persistor,
   store,
 } from './store';
+import {authActions} from './store/slices/auth.slice';
 import {profileAction} from './store/slices/profile.slice';
+import {logout} from './utils/https/auth';
 import {
   BaseButton,
   Image,
@@ -143,6 +146,7 @@ const DrawerContent = ({auth, profile}) => {
       <View className="flex-col p-5 justify-center">
         {routes.map((item, key) => (
           <View key={key}>
+            <View className="h-[0.3] bg-primary w-[80%] mx-auto" />
             <Pressable
               className="flex-row py-5 items-center"
               onPress={() =>
@@ -157,14 +161,19 @@ const DrawerContent = ({auth, profile}) => {
                 {item.title}
               </Text>
             </Pressable>
-            {routes.length > key + 1 ? (
-              <View className="h-[0.3] bg-primary w-[80%] mx-auto" />
-            ) : (
-              ''
-            )}
           </View>
         ))}
       </View>
+      {auth.data.isLogin && (
+        <View className="mt-auto mb-6 px-5">
+          <Pressable className="flex-row items-center">
+            <Text className="font-global text-primary text-lg ml-3 font-semibold mr-3">
+              Sign-out
+            </Text>
+            <ArrowIcon />
+          </Pressable>
+        </View>
+      )}
     </View>
   );
 };
@@ -192,10 +201,22 @@ const WelcomeStack = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    if (auth.data.isLogin && !profile.isFulfilled) {
-      dispatch(
-        profileAction.getProfileThunk({token: auth.data.token, controller}),
-      );
+    if (auth.data.isLogin) {
+      if (!profile.isFulfilled) {
+        dispatch(
+          profileAction.getProfileThunk({token: auth.data.token, controller}),
+        );
+      }
+      if (auth.data.exp * 1000 < Date.now()) {
+        dispatch(authActions.reset());
+        logout(auth.data.token, controller)
+          .then(result => {
+            console.log('success logout');
+          })
+          .catch(err => {
+            console.log(err.response.data);
+          });
+      }
     }
   }, [auth.data.isLogin]);
   // console.log(profile);

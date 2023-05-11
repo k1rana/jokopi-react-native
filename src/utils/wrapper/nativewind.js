@@ -4,6 +4,7 @@ import {
   Button as OriginButton,
   Image as OriginImage,
   Pressable as OriginPressable,
+  SafeAreaView as OriginSafeAreaView,
   ScrollView as OriginScrollView,
   Text as OriginText,
   TextInput as OriginTextInput,
@@ -30,3 +31,4 @@ export const TextInput = styled(OriginTextInput);
 export const ActivityIndicator = styled(OriginActivityIndicator);
 export const TouchableOpacity = styled(OriginTouchableOpacity);
 export const Swipable = styled(OriginSwipable);
+export const SafeAreaView = styled(OriginSafeAreaView);

@@ -26,6 +26,9 @@ const authSlice = createSlice({
         },
       };
     },
+    reset: () => {
+      return {...initialState};
+    },
   },
 });
 

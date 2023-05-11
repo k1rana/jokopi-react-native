@@ -6,9 +6,9 @@ export const getProductById = (product_id, controller) => {
 
 export const getProducts = (
   {
-    orderBy = 'id',
     sort = 'asc',
-    searchByName = '',
+    order_by = '',
+    search = '',
     limit = 8,
     page = 1,
     category = '',
@@ -16,9 +16,9 @@ export const getProducts = (
   controller,
 ) => {
   const params = {
-    orderBy,
+    orderBy: order_by,
     sort,
-    searchByName,
+    searchByName: search,
     limit,
     page,
     category,
