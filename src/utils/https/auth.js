@@ -20,3 +20,10 @@ export const requestResetPass = (email, controller) => {
     {signal: controller.signal},
   );
 };
+
+export const getProfile = (token, controller) => {
+  return api.get(`/apiv1/userPanel/profile`, {
+    headers: {Authorization: `Bearer ${token}`},
+    signal: controller.signal,
+  });
+};

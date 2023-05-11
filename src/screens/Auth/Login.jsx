@@ -3,14 +3,19 @@ import React, {
   useState,
 } from 'react';
 
+import jwtDecode from 'jwt-decode';
 import {View} from 'react-native';
 import Modal from 'react-native-modal';
-import {useSelector} from 'react-redux';
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
 
 import {useNavigation} from '@react-navigation/native';
 
 import GoogleIcon from '../../assets/icons/google.svg';
 import LoginImage from '../../assets/illustrations/login.svg';
+import {authActions} from '../../store/slices/auth.slice';
 import {login} from '../../utils/https/auth';
 import {
   ActivityIndicator,
@@ -24,12 +29,17 @@ const Login = () => {
     email: '',
     password: '',
   });
+  const dispatch = useDispatch();
   const [error, setError] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const nav = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
   const controller = useMemo(() => new AbortController(), []);
-  const state = useSelector(state => state.auth);
+  const auth = useSelector(state => state.auth);
+
+  if (auth.data?.isLogin) {
+    nav.navigate('Home');
+  }
 
   const setErrMsg = msg => {
     setModalVisible(true);
@@ -43,10 +53,22 @@ const Login = () => {
     login({email: form.email, password: form.password}, controller)
       .then(result => {
         setIsLoading(false);
+        console.log(jwtDecode(result.data.data.token));
+        const {id_user, token} = result.data.data;
+        const decoded = jwtDecode(token);
+        dispatch(
+          authActions.assign({
+            id_user,
+            token,
+            profile: {exp: decoded.exp, role: decoded.role},
+          }),
+        );
+        nav.navigate('Home');
         console.log('Success login');
       })
       .catch(err => {
         setIsLoading(false);
+        console.log(err);
         setErrMsg("Email and password doesn't match");
       });
   };

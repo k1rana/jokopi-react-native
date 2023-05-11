@@ -34,6 +34,15 @@ const Home = ({navigation}) => {
   const price = useSelector(state => state.price);
   const dispatch = useDispatch();
 
+  const auth = useSelector(state => state.auth);
+  const profile = useSelector(state => state.profile);
+
+  // useEffect(() => {
+  //   if (auth.data.isLogin && !profile.isFulfilled) {
+  //     dispatch(profileAction.getProfileThunk(auth.data.token, controller));
+  //   }
+  // }, [auth.data.isLogin]);
+
   const [favorite, setFavorite] = useState([]);
 
   useEffect(() => {

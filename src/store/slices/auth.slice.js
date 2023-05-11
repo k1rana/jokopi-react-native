@@ -4,6 +4,9 @@ const initialState = {
   data: {
     id_user: '',
     token: '',
+    exp: 0,
+    role: 0,
+    isLogin: false,
   },
 };
 
@@ -12,12 +15,14 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     assign: (prevState, action) => {
-      const {id, token} = action.payload;
+      const {id, token, profile} = action.payload;
       return {
         ...prevState,
         data: {
           id_user: id,
           token: token,
+          isLogin: true,
+          ...profile,
         },
       };
     },

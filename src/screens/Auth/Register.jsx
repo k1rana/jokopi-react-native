@@ -1,7 +1,11 @@
-import React, {useMemo, useState} from 'react';
+import React, {
+  useMemo,
+  useState,
+} from 'react';
 
 import {styled} from 'nativewind';
 import Modal from 'react-native-modal';
+import {useSelector} from 'react-redux';
 
 import {useNavigation} from '@react-navigation/native';
 
@@ -22,7 +26,11 @@ const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
   const nav = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
+  const auth = useSelector(state => state.auth);
 
+  if (auth.data?.isLogin) {
+    nav.navigate('Home');
+  }
   const toggleModal = () => {
     setModalVisible(!modalVisible);
   };
