@@ -26,7 +26,7 @@ export const sizeLongName = size_id => {
 };
 
 export const deliveryMethods = [
-  {id: '1', name: 'Door delivery', fee: 10000},
-  {id: '2', name: 'Pick up at store', fee: 0},
-  {id: '3', name: 'Dine in', fee: 0},
+  {id: '2', name: 'Door delivery', fee: 2500},
+  {id: '3', name: 'Pick up at store', fee: 0},
+  {id: '1', name: 'Dine in', fee: 0},
 ];

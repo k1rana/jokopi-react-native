@@ -30,7 +30,7 @@ const getProfileThunk = createAsyncThunk(
     try {
       const {controller, token} = payload;
       const response = await getProfile(token, controller);
-      console.log(response.data.data);
+      // console.log(response.data.data);
       fulfillWithValue(response.data.data[0]);
       return response.data.data[0];
     } catch (err) {

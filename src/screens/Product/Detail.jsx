@@ -50,7 +50,7 @@ const ProductDetail = () => {
   const dispatch = useDispatch();
 
   const [size, setSize] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const controller = useMemo(() => new AbortController(), []);
 
@@ -61,9 +61,11 @@ const ProductDetail = () => {
     getProductById(product_id, controller)
       .then(result => {
         // console.log(result.data.data[0]);
+        setIsLoading(false);
         setData(result.data.data[0]);
       })
       .catch(err => {
+        setIsLoading(false);
         console.log(err);
       });
   }, []);
@@ -71,7 +73,7 @@ const ProductDetail = () => {
   const addCart = () => {
     dispatch(
       cartActions.addtoCart({
-        id: data.id,
+        product_id: data.id,
         qty: 1,
         size_id: size,
         name: data.name,
@@ -81,11 +83,12 @@ const ProductDetail = () => {
     );
   };
 
-  const disabled = () => {
-    if (!size) return true;
-    if (isLoading) return true;
-    return false;
-  };
+  const disabled = !size || isLoading;
+  // const disabled = () => {
+  //   if (!size) return true;
+  //   if (isLoading) return true;
+  //   return false;
+  // };
   //   console.log(windowHeight);
 
   return (
@@ -193,10 +196,10 @@ const ProductDetail = () => {
           </View>
         </View>
         <TouchableOpacity
-          disabled={disabled()}
+          disabled={disabled}
           onPress={addCart}
           className={`${
-            disabled() ? 'bg-gray-400' : 'bg-[#6A4029]'
+            disabled ? 'bg-gray-400' : 'bg-[#6A4029]'
           }  py-5 rounded-2xl w-full flex-row justify-center mt-6`}>
           <Text
             className={` font-global text-center text-white text-base font-bold `}>

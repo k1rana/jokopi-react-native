@@ -24,11 +24,17 @@ import {
 } from '../../utils/wrapper/nativewind';
 
 const DeliveryMethod = () => {
-  const price = useSelector(state => state.price);
+  const nav = useNavigation();
   const cart = useSelector(state => state.cart);
+
+  if (cart.list.length < 1) {
+    nav.navigate('Cart');
+  }
+
+  const price = useSelector(state => state.price);
+  const profile = useSelector(state => state.profile);
   const dispatch = useDispatch();
   const controller = useMemo(() => new AbortController(), []);
-  const nav = useNavigation();
 
   const [details, setDetails] = useState({
     address: cart.delivery_address,
@@ -43,10 +49,12 @@ const DeliveryMethod = () => {
   const [methodSelected, setMethod] = useState(cart.delivery_id);
 
   const methods = [
-    {id: '1', name: 'Door delivery', fee: 10000},
-    {id: '2', name: 'Pick up at store', fee: 0},
-    {id: '3', name: 'Dine in', fee: 0},
+    {id: '2', name: 'Door delivery', fee: 2500},
+    {id: '3', name: 'Pick up at store', fee: 0},
+    {id: '1', name: 'Dine in', fee: 0},
   ];
+  const disabled =
+    details.address === '' || details.notes === '' || methodSelected === '';
 
   const totalPrice =
     cart.list.reduce(
@@ -113,7 +121,7 @@ const DeliveryMethod = () => {
             className="font-global text-black py-1 text-base border-b border-[#BABABA]"
           />
           <TextInput
-            value="+62 81348287878"
+            value={profile.data.phone_number}
             className="font-global text-black py-1 text-base"
           />
         </View>
@@ -173,9 +181,9 @@ const DeliveryMethod = () => {
         </View>
         <TouchableOpacity
           onPress={handleButton}
-          disabled={methodSelected === ''}
+          disabled={disabled === ''}
           className={`${
-            methodSelected !== '' ? `bg-[#6A4029]` : 'bg-gray-300'
+            !disabled ? `bg-[#6A4029]` : 'bg-gray-300'
           }  py-5 rounded-2xl w-full flex-row justify-center mt-6`}>
           <Text
             className={`font-global text-center text-white text-base font-bold `}>

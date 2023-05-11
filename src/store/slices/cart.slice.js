@@ -15,7 +15,7 @@ const cartSlice = createSlice({
     addtoCart: (prevState, action) => {
       const exsistIdx = prevState.list.findIndex(
         item =>
-          item.id === action.payload.id &&
+          item.product_id === action.payload.product_id &&
           item.size_id === action.payload.size_id,
       );
 
@@ -50,7 +50,7 @@ const cartSlice = createSlice({
         ...prevState,
         list: prevState.list.map(item => {
           if (
-            item.id === action.payload.id &&
+            item.product_id === action.payload.product_id &&
             item.size_id === action.payload.size_id
           ) {
             return {
@@ -68,7 +68,7 @@ const cartSlice = createSlice({
         ...prevState,
         list: prevState.list.map(item => {
           if (
-            item.id === action.payload.id &&
+            item.product_id === action.payload.product_id &&
             item.size_id === action.payload.size_id
           ) {
             if (item.qty === 1) {
@@ -89,7 +89,7 @@ const cartSlice = createSlice({
         ...prevState,
         list: prevState.list.filter(item => {
           return !(
-            item.id === action.payload.id &&
+            item.product_id === action.payload.product_id &&
             item.size_id === action.payload.size_id
           );
         }),
@@ -103,7 +103,7 @@ const cartSlice = createSlice({
         ...prevState,
         delivery_id: action.payload.delivery_id,
         delivery_address: action.payload.delivery_address,
-        notes: action.payload.delivery_address,
+        notes: action.payload.notes,
       };
     },
   },

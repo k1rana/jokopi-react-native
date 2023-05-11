@@ -21,6 +21,12 @@ export const requestResetPass = (email, controller) => {
   );
 };
 
+export const logout = (token, controller) => {
+  return api.delete(`/apiv1/auth/logout`, {
+    headers: {Authorization: `Bearer ${token}`},
+  });
+};
+
 export const getProfile = (token, controller) => {
   return api.get(`/apiv1/userPanel/profile`, {
     headers: {Authorization: `Bearer ${token}`},

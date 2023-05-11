@@ -50,6 +50,7 @@ const CartAction = ({onDelete, onStar}) => {
 
 const Cart = () => {
   const cart = useSelector(state => state.cart);
+  const auth = useSelector(state => state.auth);
   const dispatch = useDispatch();
   const price = useSelector(state => state.price);
   const controller = useMemo(() => new AbortController(), []);
@@ -59,6 +60,13 @@ const Cart = () => {
       dispatch(priceActions.getPriceBySize({controller}));
     }
   }, []);
+
+  const confirmHandler = () => {
+    if (!auth.data.isLogin) {
+      return nav.navigate('Login');
+    }
+    nav.navigate('DeliveryMethod');
+  };
   return (
     <View className="flex-1 bg-[#ECECEC]">
       <View className="px-10 py-6 flex-row justify-between items-center">
@@ -85,14 +93,14 @@ const Cart = () => {
                   onDelete={() =>
                     dispatch(
                       cartActions.removeFromCart({
-                        id: item.id,
+                        product_id: item.product_id,
                         size_id: item.size_id,
                       }),
                     )
                   }
                 />
               )}
-              key={`${item.id}-${item.size_id}`}>
+              key={`${item.product_id}-${item.size_id}`}>
               <View className="bg-white rounded-xl flex-row py-3 px-3 ml-8 relative">
                 <Image
                   source={
@@ -128,7 +136,7 @@ const Cart = () => {
                     onPress={() =>
                       dispatch(
                         cartActions.decrementQty({
-                          id: item.id,
+                          product_id: item.product_id,
                           size_id: item.size_id,
                         }),
                       )
@@ -169,7 +177,7 @@ const Cart = () => {
       {typeof cart.list === 'object' && cart.list.length > 0 ? (
         <View className="px-8 mb-5">
           <TouchableOpacity
-            onPress={() => nav.navigate('DeliveryMethod')}
+            onPress={confirmHandler}
             className={` bg-[#6A4029] py-5 rounded-2xl w-full flex-row justify-center mt-6`}>
             <Text
               className={`font-global text-center text-white text-base font-bold `}>
