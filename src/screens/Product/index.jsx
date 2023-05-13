@@ -1,16 +1,8 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 
 import _ from 'lodash';
 import {Drawer} from 'react-native-drawer-layout';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {useNavigation} from '@react-navigation/native';
 
@@ -280,9 +272,7 @@ const ProductList = () => {
               className="py-2"
               renderItem={item => (
                 <View className="w-[50%] items-center mb-4">
-                  <View
-                    className="bg-[#d3d3d3] w-[85%] h-[250] rounded-[30px] px-4 pb-4 pt-28"
-                    style={{elevation: 3}}></View>
+                  <View className="bg-[#d3d3d3] w-[85%] h-[250] rounded-[30px] px-4 pb-4 pt-28"></View>
                 </View>
               )}
             />

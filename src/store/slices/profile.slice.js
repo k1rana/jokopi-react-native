@@ -1,7 +1,4 @@
-import {
-  createAsyncThunk,
-  createSlice,
-} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 
 import {getProfile} from '../../utils/https/auth';
 
@@ -26,7 +23,7 @@ const initialState = {
 
 const getProfileThunk = createAsyncThunk(
   'profile/get',
-  async (payload, {fulfillWithValue, rejectWithValue}) => {
+  async (payload, {rejectWithValue, fulfillWithValue}) => {
     try {
       const {controller, token} = payload;
       const response = await getProfile(token, controller);
@@ -47,8 +44,22 @@ const profileSlice = createSlice({
   reducers: {
     reset: prevState => {
       return {
-        ...prevState,
-        data: [],
+        data: {
+          user_id: 0,
+          display_name: null,
+          first_name: null,
+          last_name: null,
+          address: null,
+          birthdate: null,
+          img: null,
+          created_at: '',
+          email: '',
+          phone_number: '',
+        },
+        isLoading: false,
+        isRejected: false,
+        isFulfilled: false,
+        err: null,
       };
     },
   },

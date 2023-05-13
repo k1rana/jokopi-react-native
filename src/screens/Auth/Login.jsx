@@ -1,21 +1,16 @@
-import React, {
-  useMemo,
-  useState,
-} from 'react';
+import React, {useMemo, useState} from 'react';
 
 import jwtDecode from 'jwt-decode';
 import {View} from 'react-native';
 import Modal from 'react-native-modal';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {useNavigation} from '@react-navigation/native';
 
 import GoogleIcon from '../../assets/icons/google.svg';
 import LoginImage from '../../assets/illustrations/login.svg';
 import {authActions} from '../../store/slices/auth.slice';
+import {profileAction} from '../../store/slices/profile.slice';
 import {login} from '../../utils/https/auth';
 import {
   ActivityIndicator,
@@ -56,6 +51,9 @@ const Login = () => {
         console.log(jwtDecode(result.data.data.token));
         const {id_user, token} = result.data.data;
         const decoded = jwtDecode(token);
+        dispatch(
+          profileAction.getProfileThunk({token: auth.data.token, controller}),
+        );
         dispatch(
           authActions.assign({
             id_user,

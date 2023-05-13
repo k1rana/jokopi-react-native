@@ -1,21 +1,11 @@
-import React, {
-  useEffect,
-  useMemo,
-} from 'react';
+import React, {useEffect, useMemo} from 'react';
 
 import _ from 'lodash';
-import {
-  Provider,
-  useDispatch,
-  useSelector,
-} from 'react-redux';
+import {Provider, useDispatch, useSelector} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import {
-  NavigationContainer,
-  useNavigation,
-} from '@react-navigation/native';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import ArrowIcon from './assets/icons/drawer/arrow.svg';
@@ -39,10 +29,7 @@ import DeliveryMethod from './screens/Transaction/DeliveryMethod';
 import Payment from './screens/Transaction/Payment';
 import Result from './screens/Transaction/Result';
 import Welcome from './screens/Welcome';
-import {
-  persistor,
-  store,
-} from './store';
+import {persistor, store} from './store';
 import {authActions} from './store/slices/auth.slice';
 import {profileAction} from './store/slices/profile.slice';
 import {logout} from './utils/https/auth';
@@ -90,8 +77,12 @@ const DrawerContent = ({auth, profile}) => {
     <View className="flex-1 bg-drawer">
       <View className="bg-primary rounded-br-3xl items-center py-8">
         <Image
-          source={profilePlaceholder}
-          className="rounded-full mb-2"
+          source={
+            auth.data.isLogin && profile.data.img
+              ? {uri: profile.data.img}
+              : profilePlaceholder
+          }
+          className="rounded-full mb-2 bg-white"
           style={{
             width: 100,
             height: 100,
@@ -202,20 +193,23 @@ const WelcomeStack = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     if (auth.data.isLogin) {
-      if (!profile.isFulfilled) {
-        dispatch(
-          profileAction.getProfileThunk({token: auth.data.token, controller}),
-        );
-      }
       if (auth.data.exp * 1000 < Date.now()) {
         dispatch(authActions.reset());
         logout(auth.data.token, controller)
           .then(result => {
+            dispatch(profileAction.reset());
             console.log('success logout');
           })
           .catch(err => {
+            dispatch(profileAction.reset());
             console.log(err.response.data);
           });
+      }
+
+      if (!profile.isFulfilled) {
+        dispatch(
+          profileAction.getProfileThunk({token: auth.data.token, controller}),
+        );
       }
     }
   }, [auth.data.isLogin]);
