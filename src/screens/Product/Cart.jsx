@@ -3,6 +3,7 @@ import React, {
   useMemo,
 } from 'react';
 
+import _ from 'lodash';
 import {
   useDispatch,
   useSelector,
@@ -111,7 +112,10 @@ const Cart = () => {
                   className="w-[70] h-[70] rounded-full"></Image>
                 <View className="ml-3">
                   <Text className="font-global text-black font-bold text-lg">
-                    {item.name}
+                    {_.truncate(item.name, {
+                      length: 20,
+                      omission: '...',
+                    })}
                   </Text>
                   <Text className="font-global text-black text-base">
                     {sizeName(item.size_id)} ({sizeLongName(item.size_id)})

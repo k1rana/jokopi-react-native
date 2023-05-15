@@ -1,11 +1,22 @@
-import React, {useEffect, useMemo} from 'react';
+/* eslint-disable prettier/prettier */
+import React, {
+  useEffect,
+  useMemo,
+} from 'react';
 
 import _ from 'lodash';
-import {Provider, useDispatch, useSelector} from 'react-redux';
+import {
+  Provider,
+  useDispatch,
+  useSelector,
+} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import {NavigationContainer, useNavigation} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  useNavigation,
+} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import ArrowIcon from './assets/icons/drawer/arrow.svg';
@@ -29,7 +40,10 @@ import DeliveryMethod from './screens/Transaction/DeliveryMethod';
 import Payment from './screens/Transaction/Payment';
 import Result from './screens/Transaction/Result';
 import Welcome from './screens/Welcome';
-import {persistor, store} from './store';
+import {
+  persistor,
+  store,
+} from './store';
 import {authActions} from './store/slices/auth.slice';
 import {profileAction} from './store/slices/profile.slice';
 import {logout} from './utils/https/auth';
@@ -44,6 +58,7 @@ import {
 
 const DrawerContent = ({auth, profile}) => {
   const nav = useNavigation();
+  const dispatch = useDispatch();
   // console.log(auth);
   const routes = [
     {
@@ -83,6 +98,7 @@ const DrawerContent = ({auth, profile}) => {
               : profilePlaceholder
           }
           className="rounded-full mb-2 bg-white"
+          // eslint-disable-next-line react-native/no-inline-styles
           style={{
             width: 100,
             height: 100,
@@ -157,7 +173,9 @@ const DrawerContent = ({auth, profile}) => {
       </View>
       {auth.data.isLogin && (
         <View className="mt-auto mb-6 px-5">
-          <Pressable className="flex-row items-center">
+          <Pressable
+            className="flex-row items-center"
+            onPress={() => dispatch(authActions.openModal())}>
             <Text className="font-global text-primary text-lg ml-3 font-semibold mr-3">
               Sign-out
             </Text>
@@ -171,7 +189,7 @@ const DrawerContent = ({auth, profile}) => {
 
 const Drawer = createDrawerNavigator();
 
-function MyDrawer() {
+function HomeDrawer() {
   const auth = useSelector(state => state.auth);
   const profile = useSelector(state => state.profile);
   return (
@@ -182,6 +200,16 @@ function MyDrawer() {
       }}
       drawerContent={() => <DrawerContent auth={auth} profile={profile} />}>
       <Drawer.Screen name="Home" component={Home} />
+      <Drawer.Screen
+        name="Profile"
+        component={Profile}
+        options={{swipeEnabled: false}}
+      />
+      <Drawer.Screen
+        name="History"
+        component={History}
+        options={{swipeEnabled: false}}
+      />
     </Drawer.Navigator>
   );
 }
@@ -225,16 +253,13 @@ const WelcomeStack = () => {
       <Screen name="ProductList" component={ProductList} />
       <Screen name="ProductDetail" component={ProductDetail} />
 
-      <Screen name="Profile" component={Profile} />
-      <Screen name="History" component={History} />
-
       <Screen name="Cart" component={Cart} />
       <Screen name="DeliveryMethod" component={DeliveryMethod} />
       <Screen name="Payment" component={Payment} />
       <Screen name="Result" component={Result} />
 
       <Screen name="ForgotPass" component={ForgotPass} />
-      <Screen name="MyDrawer" component={MyDrawer} />
+      <Screen name="HomeDrawer" component={HomeDrawer} />
     </Navigator>
   );
 };

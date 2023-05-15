@@ -3,7 +3,11 @@ import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 
 import WelcomeImage from '../../assets/illustrations/welcome.svg';
-import {Pressable, Text, View} from '../../utils/wrapper/nativewind';
+import {
+  Pressable,
+  Text,
+  View,
+} from '../../utils/wrapper/nativewind';
 
 const Welcome = () => {
   const navigation = useNavigation();
@@ -17,7 +21,7 @@ const Welcome = () => {
       <WelcomeImage width={600} height={400} />
       <Pressable
         className="bg-[#6A4029] py-5 rounded-2xl w-full"
-        onPress={() => navigation.navigate('MyDrawer')}>
+        onPress={() => navigation.navigate('HomeDrawer')}>
         <Text className="font-global text-center text-white text-lg font-bold">
           Get Started
         </Text>

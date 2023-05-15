@@ -8,6 +8,7 @@ const initialState = {
     role: 0,
     isLogin: false,
   },
+  logoutOpen: false,
 };
 
 const authSlice = createSlice({
@@ -28,6 +29,24 @@ const authSlice = createSlice({
     },
     reset: () => {
       return {...initialState};
+    },
+    toggleModal: prevState => {
+      return {
+        ...prevState,
+        logoutOpen: !prevState.logoutOpen,
+      };
+    },
+    openModal: prevState => {
+      return {
+        ...prevState,
+        logoutOpen: true,
+      };
+    },
+    closeModal: prevState => {
+      return {
+        ...prevState,
+        logoutOpen: false,
+      };
     },
   },
 });

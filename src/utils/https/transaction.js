@@ -17,3 +17,10 @@ export const createTransaction = (
     headers: {Authorization: `Bearer ${token}`},
   });
 };
+
+export const getTransactionHistory = (token, controller) => {
+  return api.get('/apiv1/userPanel/transactions', {
+    headers: {Authorization: `Bearer ${token}`},
+    signal: controller.signal,
+  });
+};
