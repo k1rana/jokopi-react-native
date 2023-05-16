@@ -1,22 +1,12 @@
 /* eslint-disable prettier/prettier */
-import React, {
-  useEffect,
-  useMemo,
-} from 'react';
+import React, {useEffect, useMemo} from 'react';
 
 import _ from 'lodash';
-import {
-  Provider,
-  useDispatch,
-  useSelector,
-} from 'react-redux';
+import {Provider, useDispatch, useSelector} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import {
-  NavigationContainer,
-  useNavigation,
-} from '@react-navigation/native';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import ArrowIcon from './assets/icons/drawer/arrow.svg';
@@ -31,19 +21,18 @@ import ForgotPass from './screens/Auth/ForgotPass';
 import Login from './screens/Auth/Login';
 import Register from './screens/Auth/Register';
 import Home from './screens/Home';
+import PrivacyPolicy from './screens/Home/PrivacyPolicy';
 import ProductList from './screens/Product';
 import Cart from './screens/Product/Cart';
 import ProductDetail from './screens/Product/Detail';
 import Profile from './screens/Profile';
+import EditPassword from './screens/Profile/EditPassword';
 import History from './screens/Profile/History';
 import DeliveryMethod from './screens/Transaction/DeliveryMethod';
 import Payment from './screens/Transaction/Payment';
 import Result from './screens/Transaction/Result';
 import Welcome from './screens/Welcome';
-import {
-  persistor,
-  store,
-} from './store';
+import {persistor, store} from './store';
 import {authActions} from './store/slices/auth.slice';
 import {profileAction} from './store/slices/profile.slice';
 import {logout} from './utils/https/auth';
@@ -81,7 +70,7 @@ const DrawerContent = ({auth, profile}) => {
       needLogin: false,
     },
     {
-      path: 'PrivacyPolicy',
+      path: 'EditPassword',
       title: 'Security',
       Icon: securityIcon,
       needLogin: false,
@@ -210,6 +199,11 @@ function HomeDrawer() {
         component={History}
         options={{swipeEnabled: false}}
       />
+      <Drawer.Screen
+        name="PrivacyPolicy"
+        component={PrivacyPolicy}
+        options={{swipeEnabled: false}}
+      />
     </Drawer.Navigator>
   );
 }
@@ -221,23 +215,27 @@ const WelcomeStack = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     if (auth.data.isLogin) {
-      if (auth.data.exp * 1000 < Date.now()) {
-        dispatch(authActions.reset());
-        logout(auth.data.token, controller)
-          .then(result => {
-            dispatch(profileAction.reset());
-            console.log('success logout');
-          })
-          .catch(err => {
-            dispatch(profileAction.reset());
-            console.log(err.response.data);
-          });
-      }
-
-      if (!profile.isFulfilled) {
+      // console.log(profile);
+      if (!profile.isFulfilled && !profile.isLoading && !profile.isRejected) {
         dispatch(
           profileAction.getProfileThunk({token: auth.data.token, controller}),
         );
+      }
+
+      if (auth.data.exp * 1000 < Date.now()) {
+        dispatch(authActions.reset());
+        dispatch(profileAction.reset());
+        logout(auth.data.token, controller)
+          .then(result => {
+            console.log('success logout');
+          })
+          .catch(err => {
+            console.log(err.response.data);
+          });
+      }
+    } else {
+      if (profile.isFulfilled) {
+        dispatch(profileAction.reset());
       }
     }
   }, [auth.data.isLogin]);
@@ -252,6 +250,8 @@ const WelcomeStack = () => {
 
       <Screen name="ProductList" component={ProductList} />
       <Screen name="ProductDetail" component={ProductDetail} />
+
+      <Screen name="EditPassword" component={EditPassword} />
 
       <Screen name="Cart" component={Cart} />
       <Screen name="DeliveryMethod" component={DeliveryMethod} />

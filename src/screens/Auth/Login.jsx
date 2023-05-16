@@ -1,9 +1,15 @@
-import React, {useMemo, useState} from 'react';
+import React, {
+  useMemo,
+  useState,
+} from 'react';
 
 import jwtDecode from 'jwt-decode';
 import {View} from 'react-native';
 import Modal from 'react-native-modal';
-import {useDispatch, useSelector} from 'react-redux';
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
 
 import {useNavigation} from '@react-navigation/native';
 
@@ -48,11 +54,14 @@ const Login = () => {
     login({email: form.email, password: form.password}, controller)
       .then(result => {
         setIsLoading(false);
-        console.log(jwtDecode(result.data.data.token));
+        // console.log(jwtDecode(result.data.data.token));
         const {id_user, token} = result.data.data;
         const decoded = jwtDecode(token);
         dispatch(
-          profileAction.getProfileThunk({token: auth.data.token, controller}),
+          profileAction.getProfileThunk({
+            token: result.data.data.token,
+            controller,
+          }),
         );
         dispatch(
           authActions.assign({

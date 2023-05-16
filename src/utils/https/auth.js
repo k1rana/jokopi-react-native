@@ -77,3 +77,16 @@ export const editProfile = (
     signal: controller.signal,
   });
 };
+
+export const editPassword = ({oldPassword, newPassword}, token, controller) => {
+  return api.patch(
+    '/apiv1/auth/editPassword',
+    {oldPassword, newPassword},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      signal: controller.signal,
+    },
+  );
+};

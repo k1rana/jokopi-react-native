@@ -86,7 +86,7 @@ const Home = ({navigation}) => {
   }, []);
 
   const logoutHandler = () => {
-    console.log('lolo gabahaya ta?');
+    // console.log('lolo gabahaya ta?');
     setLogoutProc(true);
     logout(auth.data.token, authController)
       .then(result => {
@@ -128,14 +128,14 @@ const Home = ({navigation}) => {
               <TouchableOpacity
                 className="flex-1 px-5 py-4 rounded-lg"
                 onPress={logoutHandler}>
-                <Text className="font-global text-primary text-center font-medium">
+                <Text className="font-global text-primary text-center font-semibold">
                   Yes
                 </Text>
               </TouchableOpacity>
               <Pressable
                 className="flex-1 px-5 py-4 border-l border-gray-400"
                 onPress={() => dispatch(authActions.closeModal())}>
-                <Text className="font-global text-black text-center">
+                <Text className="font-global text-black text-center font-medium">
                   Nah, i'm stay
                 </Text>
               </Pressable>

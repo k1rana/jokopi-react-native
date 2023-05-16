@@ -1,4 +1,7 @@
-import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
+import {
+  createAsyncThunk,
+  createSlice,
+} from '@reduxjs/toolkit';
 
 import {getProfile} from '../../utils/https/auth';
 
@@ -23,17 +26,21 @@ const initialState = {
 
 const getProfileThunk = createAsyncThunk(
   'profile/get',
-  async (payload, {rejectWithValue, fulfillWithValue}) => {
+  async (payload, {fulfillWithValue, rejectWithValue}) => {
     try {
       const {controller, token} = payload;
       const response = await getProfile(token, controller);
       // console.log(response.data.data);
+      if (response.status !== '200') {
+        rejectWithValue(response.data.msg);
+      }
       fulfillWithValue(response.data.data[0]);
       return response.data.data[0];
     } catch (err) {
       console.log(err);
       // store.dispatch(authAction.dismissAuth());
       rejectWithValue(err.message);
+      return;
     }
   },
 );
