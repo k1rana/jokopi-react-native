@@ -16,11 +16,11 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     assign: (prevState, action) => {
-      const {id, token, profile} = action.payload;
+      const {id_user, token, profile} = action.payload;
       return {
         ...prevState,
         data: {
-          id_user: id,
+          id_user: id_user,
           token: token,
           isLogin: true,
           ...profile,

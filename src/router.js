@@ -2,6 +2,7 @@
 import React, {useEffect, useMemo} from 'react';
 
 import _ from 'lodash';
+import {extendTheme, NativeBaseProvider} from 'native-base';
 import {Provider, useDispatch, useSelector} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 
@@ -24,10 +25,13 @@ import Home from './screens/Home';
 import PrivacyPolicy from './screens/Home/PrivacyPolicy';
 import ProductList from './screens/Product';
 import Cart from './screens/Product/Cart';
+import CreateProduct from './screens/Product/Create';
 import ProductDetail from './screens/Product/Detail';
+import EditProduct from './screens/Product/Edit';
 import Profile from './screens/Profile';
 import EditPassword from './screens/Profile/EditPassword';
 import History from './screens/Profile/History';
+import ScreenNotify from './screens/Profile/Notify';
 import DeliveryMethod from './screens/Transaction/DeliveryMethod';
 import Payment from './screens/Transaction/Payment';
 import Result from './screens/Transaction/Result';
@@ -253,10 +257,14 @@ const WelcomeStack = () => {
 
       <Screen name="EditPassword" component={EditPassword} />
 
+      <Screen name="CreateProduct" component={CreateProduct} />
+      <Screen name="EditProduct" component={EditProduct} />
+
       <Screen name="Cart" component={Cart} />
       <Screen name="DeliveryMethod" component={DeliveryMethod} />
       <Screen name="Payment" component={Payment} />
       <Screen name="Result" component={Result} />
+      <Screen name="ScreenNotify" component={ScreenNotify} />
 
       <Screen name="ForgotPass" component={ForgotPass} />
       <Screen name="HomeDrawer" component={HomeDrawer} />
@@ -265,12 +273,30 @@ const WelcomeStack = () => {
 };
 
 const Router = () => {
+  const theme = extendTheme({
+    colors: {
+      // Add new color
+      primary: '#6A4029',
+      secondary: '#ffba33',
+      // Redefining only one shade, rest of the color will remain same.
+      amber: {
+        400: '#d97706',
+      },
+    },
+    config: {
+      // Changing initialColorMode to 'dark'
+      initialColorMode: 'dark',
+    },
+  });
+
   return (
     <Provider store={store}>
       <PersistGate loading={<Text>Loading...</Text>} persistor={persistor}>
-        <NavigationContainer>
-          <WelcomeStack />
-        </NavigationContainer>
+        <NativeBaseProvider theme={theme}>
+          <NavigationContainer>
+            <WelcomeStack />
+          </NavigationContainer>
+        </NativeBaseProvider>
       </PersistGate>
     </Provider>
   );

@@ -1,20 +1,15 @@
-import React, {
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 
+import {Center, Fab, VStack} from 'native-base';
 import Modal from 'react-native-modal';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {useNavigation} from '@react-navigation/native';
 
 import BurgerIcon from '../../assets/icons/burger-drawer.svg';
 import CartIcon from '../../assets/icons/cart.svg';
 import ChatIcon from '../../assets/icons/chat.svg';
+import PenIcon from '../../assets/icons/pen.svg';
 import SearchIcon from '../../assets/icons/search.svg';
 import productPlaceholder from '../../assets/images/product-placeholder.png';
 import {authActions} from '../../store/slices/auth.slice';
@@ -40,6 +35,8 @@ const Home = ({navigation}) => {
   const price = useSelector(state => state.price);
   const dispatch = useDispatch();
   const [logoutProcess, setLogoutProc] = useState(false);
+
+  const [fab, setFab] = useState(false);
 
   const auth = useSelector(state => state.auth);
   const authController = useMemo(
@@ -102,6 +99,7 @@ const Home = ({navigation}) => {
         nav.navigate('Home');
       });
   };
+
   return (
     <>
       <Modal
@@ -143,7 +141,49 @@ const Home = ({navigation}) => {
           </View>
         )}
       </Modal>
-      <View>
+      <View className="flex-1">
+        <Fab
+          renderInPortal={false}
+          shadow={2}
+          bgColor={'primary'}
+          size="sm"
+          left={8}
+          bottom={12}
+          placement="bottom-left"
+          zIndex={31}
+          onPress={() => setFab(!fab)}
+          icon={
+            <Text
+              className={`${
+                fab ? 'rotate-45' : 'rotate-0'
+              } font-global font-semibold mx-2 text-2xl text-white`}>
+              +
+            </Text>
+          }
+        />
+        {fab && (
+          <>
+            <Pressable
+              className="bg-black/40 z-30 absolute w-screen h-screen"
+              onPress={() => setFab(false)}></Pressable>
+            <View className="absolute z-40 bottom-2 left-28">
+              <VStack space={4} alignItems="flex-start">
+                <Pressable onPress={() => nav.navigate('CreateProduct')}>
+                  <Center w="48" h="16" bg="secondary" rounded="md" shadow={3}>
+                    <Text className="font-global text-primary font-bold">
+                      New Product
+                    </Text>
+                  </Center>
+                </Pressable>
+                <Center w="48" h="16" bg="secondary" rounded="md" shadow={3}>
+                  <Text className="font-global text-primary font-bold">
+                    New Promo
+                  </Text>
+                </Center>
+              </VStack>
+            </View>
+          </>
+        )}
         <View className="px-8 bg-drawer py-6 flex-row justify-between">
           <Pressable onPress={() => navigation.openDrawer()}>
             <BurgerIcon width={25} height={25} />
@@ -208,6 +248,13 @@ const Home = ({navigation}) => {
                       style={{width: 180, height: 180, resizeMode: 'cover'}}
                       className="rounded-2xl"
                     />
+                    <Pressable
+                      onPress={() =>
+                        nav.navigate('EditProduct', {product_id: item.id})
+                      }
+                      className="rounded-full bg-primary absolute  w-[35] h-[35]  items-center justify-center -bottom-4 -right-4">
+                      <PenIcon width={13} height={13} />
+                    </Pressable>
                   </View>
                   <View className="bg-white items-center w-[220] h-[250] pt-36 pb-5 z-10  rounded-3xl gap-y-1  shadow-home-products justify-between">
                     <Text className="font-global text-black min-h-[] text-xl font-bold text-center max-w-[150]">
@@ -248,7 +295,7 @@ const Home = ({navigation}) => {
           ) : (
             <FlatList
               data={promo}
-              className="flex-row px-6 flex-none bg-drawer mb-32"
+              className="flex-row px-6 flex-none bg-drawer mb-16"
               horizontal
               view
               showsHorizontalScrollIndicator={false}
@@ -265,6 +312,13 @@ const Home = ({navigation}) => {
                       style={{width: 180, height: 180, resizeMode: 'cover'}}
                       className="rounded-2xl"
                     />
+                    <Pressable
+                      onPress={() =>
+                        nav.navigate('EditProduct', {product_id: item.id})
+                      }
+                      className="rounded-full bg-primary absolute  w-[35] h-[35]  items-center justify-center -bottom-4 -right-4">
+                      <PenIcon width={13} height={13} />
+                    </Pressable>
                   </View>
                   <View className="bg-white items-center w-[220px] h-[250] pt-36 pb-5 z-10  rounded-3xl gap-y-1  shadow-home-products justify-between">
                     <Text className="font-global text-black min-h-[] text-xl font-bold text-center max-w-[150]">
@@ -278,6 +332,11 @@ const Home = ({navigation}) => {
               )}
               nestedScrollEnabled></FlatList>
           )}
+          <Pressable
+            className="my-52"
+            onPress={() => nav.navigate('ScreenNotify')}>
+            <Text className="text-black">Goto</Text>
+          </Pressable>
         </ScrollView>
       </View>
     </>
