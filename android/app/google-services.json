@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "323857350699",
+    "project_id": "jokopi-id",
+    "storage_bucket": "jokopi-id.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:323857350699:android:977bb10be497cb3a106a6e",
+        "android_client_info": {
+          "package_name": "com.jokopi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "323857350699-54a7hfbua04oebuubefsu3sea9c1tn2q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBld1uYu6uP4gVgbLzHhMza8g33NgInFTg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "323857350699-54a7hfbua04oebuubefsu3sea9c1tn2q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

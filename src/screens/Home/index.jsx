@@ -332,11 +332,6 @@ const Home = ({navigation}) => {
               )}
               nestedScrollEnabled></FlatList>
           )}
-          <Pressable
-            className="my-52"
-            onPress={() => nav.navigate('ScreenNotify')}>
-            <Text className="text-black">Goto</Text>
-          </Pressable>
         </ScrollView>
       </View>
     </>

@@ -17,6 +17,8 @@ import privacyIcon from './assets/icons/drawer/privacy-policy.svg';
 import profileIcon from './assets/icons/drawer/profile.svg';
 import securityIcon from './assets/icons/drawer/security.svg';
 import profilePlaceholder from './assets/images/profile-img-placeholder.png';
+import AdminDashboard from './screens/Admin';
+import ManageOrder from './screens/Admin/ManageOrder';
 // import DrawerContent from './components/Drawer';
 import ForgotPass from './screens/Auth/ForgotPass';
 import Login from './screens/Auth/Login';
@@ -31,7 +33,6 @@ import EditProduct from './screens/Product/Edit';
 import Profile from './screens/Profile';
 import EditPassword from './screens/Profile/EditPassword';
 import History from './screens/Profile/History';
-import ScreenNotify from './screens/Profile/Notify';
 import DeliveryMethod from './screens/Transaction/DeliveryMethod';
 import Payment from './screens/Transaction/Payment';
 import Result from './screens/Transaction/Result';
@@ -53,33 +54,74 @@ const DrawerContent = ({auth, profile}) => {
   const nav = useNavigation();
   const dispatch = useDispatch();
   // console.log(auth);
-  const routes = [
-    {
-      path: 'Profile',
-      title: 'Edit Profile',
-      Icon: profileIcon,
-      needLogin: true,
-    },
-    {path: 'History', title: 'Orders', Icon: orderIcon, needLogin: true},
-    {
-      path: 'ProductList',
-      title: 'All menu',
-      Icon: menuIcon,
-      needLogin: false,
-    },
-    {
-      path: 'PrivacyPolicy',
-      title: 'Privacy policy',
-      Icon: privacyIcon,
-      needLogin: false,
-    },
-    {
-      path: 'EditPassword',
-      title: 'Security',
-      Icon: securityIcon,
-      needLogin: false,
-    },
-  ];
+
+  let routes;
+  switch (Number(auth.data.role)) {
+    case 2:
+      routes = [
+        {
+          path: 'Profile',
+          title: 'Edit Profile',
+          Icon: profileIcon,
+          needLogin: true,
+        },
+        {
+          path: 'ManageOrder',
+          title: 'Orders',
+          Icon: orderIcon,
+          needLogin: true,
+        },
+        {
+          path: 'ProductList',
+          title: 'All menu',
+          Icon: menuIcon,
+          needLogin: false,
+        },
+        {
+          path: 'AdminDashboard',
+          title: 'Sales Report',
+          Icon: privacyIcon,
+          needLogin: true,
+        },
+        {
+          path: 'EditPassword',
+          title: 'Security',
+          Icon: securityIcon,
+          needLogin: true,
+        },
+      ];
+      break;
+
+    default:
+      routes = [
+        {
+          path: 'Profile',
+          title: 'Edit Profile',
+          Icon: profileIcon,
+          needLogin: true,
+        },
+        {path: 'History', title: 'Orders', Icon: orderIcon, needLogin: true},
+        {
+          path: 'ProductList',
+          title: 'All menu',
+          Icon: menuIcon,
+          needLogin: false,
+        },
+        {
+          path: 'PrivacyPolicy',
+          title: 'Privacy policy',
+          Icon: privacyIcon,
+          needLogin: false,
+        },
+        {
+          path: 'EditPassword',
+          title: 'Security',
+          Icon: securityIcon,
+          needLogin: true,
+        },
+      ];
+      break;
+  }
 
   return (
     <View className="flex-1 bg-drawer">
@@ -260,11 +302,13 @@ const WelcomeStack = () => {
       <Screen name="CreateProduct" component={CreateProduct} />
       <Screen name="EditProduct" component={EditProduct} />
 
+      <Screen name="AdminDashboard" component={AdminDashboard} />
+      <Screen name="ManageOrder" component={ManageOrder} />
+
       <Screen name="Cart" component={Cart} />
       <Screen name="DeliveryMethod" component={DeliveryMethod} />
       <Screen name="Payment" component={Payment} />
       <Screen name="Result" component={Result} />
-      <Screen name="ScreenNotify" component={ScreenNotify} />
 
       <Screen name="ForgotPass" component={ForgotPass} />
       <Screen name="HomeDrawer" component={HomeDrawer} />
