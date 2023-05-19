@@ -1,6 +1,6 @@
 import React, {useEffect, useMemo, useState} from 'react';
 
-import {Skeleton, Spinner} from 'native-base';
+import {Box, Skeleton, Spinner, useToast} from 'native-base';
 import {Dimensions} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -25,6 +25,7 @@ import {
 const ProductDetail = () => {
   const windowHeight = Dimensions.get('window').height;
   const nav = useNavigation();
+  const toast = useToast();
   const router = useRoute();
   const {product_id} = router.params;
   const [data, setData] = useState({
@@ -74,6 +75,15 @@ const ProductDetail = () => {
         price: data.price,
       }),
     );
+    toast.show({
+      render: () => {
+        return (
+          <Box bg="emerald.500" px="2" py="1" rounded="sm" mb={5}>
+            Added to cart
+          </Box>
+        );
+      },
+    });
   };
 
   const disabled = !size || isLoading;

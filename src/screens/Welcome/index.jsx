@@ -1,16 +1,19 @@
 import React from 'react';
 
+import {useSelector} from 'react-redux';
+
 import {useNavigation} from '@react-navigation/native';
 
 import WelcomeImage from '../../assets/illustrations/welcome.svg';
-import {
-  Pressable,
-  Text,
-  View,
-} from '../../utils/wrapper/nativewind';
+import {Pressable, Text, View} from '../../utils/wrapper/nativewind';
 
 const Welcome = () => {
   const navigation = useNavigation();
+  const auth = useSelector(state => state.auth);
+  if (auth.data.isLogin) {
+    navigation.navigate('HomeDrawer');
+  }
+
   return (
     <View className="flex-1 justify-center items-center font-bold px-7 py-2">
       <Text

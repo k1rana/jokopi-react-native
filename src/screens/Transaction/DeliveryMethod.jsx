@@ -1,13 +1,6 @@
-import React, {
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {useNavigation} from '@react-navigation/native';
 
@@ -17,6 +10,7 @@ import {priceActions} from '../../store/slices/price.slice';
 import {n_f} from '../../utils/helpers';
 import {
   Pressable,
+  ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
@@ -93,7 +87,7 @@ const DeliveryMethod = () => {
 
         <Text></Text>
       </View>
-      <View className="px-8 flex-1">
+      <ScrollView className="px-8 flex-1">
         <Text className="font-global text-black font-black text-4xl mt-3">
           Delivery
         </Text>
@@ -171,9 +165,9 @@ const DeliveryMethod = () => {
             </View>
           ))}
         </View>
-      </View>
+      </ScrollView>
       <View className="px-8 mb-5">
-        <View className="flex-row justify-between">
+        <View className="flex-row justify-between pt-2">
           <Text className="font-global text-black text-base">Total</Text>
           <Text className="font-global text-black text-xl font-bold">
             IDR {n_f(totalPrice)}
@@ -184,7 +178,7 @@ const DeliveryMethod = () => {
           disabled={disabled === ''}
           className={`${
             !disabled ? `bg-[#6A4029]` : 'bg-gray-300'
-          }  py-5 rounded-2xl w-full flex-row justify-center mt-6`}>
+          }  py-5 rounded-2xl w-full flex-row justify-center mt-2`}>
           <Text
             className={`font-global text-center text-white text-base font-bold `}>
             Proceed to payment

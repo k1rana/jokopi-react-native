@@ -1,13 +1,7 @@
-import React, {
-  useEffect,
-  useMemo,
-} from 'react';
+import React, {useEffect, useMemo} from 'react';
 
 import _ from 'lodash';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {useNavigation} from '@react-navigation/native';
 
@@ -19,11 +13,7 @@ import CartIcon from '../../assets/illustrations/wishlist.svg';
 import {cartActions} from '../../store/slices/cart.slice';
 import {priceActions} from '../../store/slices/price.slice';
 // import CartAction from '../../components/CartAction';
-import {
-  n_f,
-  sizeLongName,
-  sizeName,
-} from '../../utils/helpers';
+import {n_f, sizeLongName, sizeName} from '../../utils/helpers';
 import {
   Image,
   Pressable,

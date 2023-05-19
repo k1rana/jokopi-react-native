@@ -1,12 +1,6 @@
-import React, {
-  useMemo,
-  useState,
-} from 'react';
+import React, {useMemo, useState} from 'react';
 
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {useNavigation} from '@react-navigation/native';
 
@@ -14,11 +8,7 @@ import BackIcon from '../../assets/icons/arrow-left-black.svg';
 import BankIcon from '../../assets/icons/payment/bank.svg';
 import CardIcon from '../../assets/icons/payment/card.svg';
 import CodIcon from '../../assets/icons/payment/cod.svg';
-import {
-  deliveryMethods,
-  n_f,
-  sizeLongName,
-} from '../../utils/helpers';
+import {deliveryMethods, n_f, sizeLongName} from '../../utils/helpers';
 import {createTransaction} from '../../utils/https/transaction';
 import {
   Image,
@@ -79,7 +69,12 @@ const Payment = () => {
     setIsLoading(true);
     setStatus({success: false, failed: false});
     createTransaction(
-      {payment_id: methodSelected, delivery_id: cart.delivery_id},
+      {
+        payment_id: methodSelected,
+        delivery_id: cart.delivery_id,
+        address: cart.delivery_address,
+        notes: cart.notes,
+      },
       cart.list,
       auth.data.token,
       controller,

@@ -39,6 +39,8 @@ const Home = ({navigation}) => {
   const [fab, setFab] = useState(false);
 
   const auth = useSelector(state => state.auth);
+  const isAdmin = auth?.data?.role > 1;
+
   const authController = useMemo(
     () => new AbortController(),
     [auth.data.token],
@@ -142,25 +144,27 @@ const Home = ({navigation}) => {
         )}
       </Modal>
       <View className="flex-1">
-        <Fab
-          renderInPortal={false}
-          shadow={2}
-          bgColor={'primary'}
-          size="sm"
-          left={8}
-          bottom={12}
-          placement="bottom-left"
-          zIndex={31}
-          onPress={() => setFab(!fab)}
-          icon={
-            <Text
-              className={`${
-                fab ? 'rotate-45' : 'rotate-0'
-              } font-global font-semibold mx-2 text-2xl text-white`}>
-              +
-            </Text>
-          }
-        />
+        {isAdmin && (
+          <Fab
+            renderInPortal={false}
+            shadow={2}
+            bgColor={'primary'}
+            size="sm"
+            left={8}
+            bottom={12}
+            placement="bottom-left"
+            zIndex={31}
+            onPress={() => setFab(!fab)}
+            icon={
+              <Text
+                className={`${
+                  fab ? 'rotate-45' : 'rotate-0'
+                } font-global font-semibold mx-2 text-2xl text-white`}>
+                +
+              </Text>
+            }
+          />
+        )}
         {fab && (
           <>
             <Pressable
@@ -175,11 +179,13 @@ const Home = ({navigation}) => {
                     </Text>
                   </Center>
                 </Pressable>
-                <Center w="48" h="16" bg="secondary" rounded="md" shadow={3}>
-                  <Text className="font-global text-primary font-bold">
-                    New Promo
-                  </Text>
-                </Center>
+                <Pressable onPress={() => nav.navigate('CreatePromo')}>
+                  <Center w="48" h="16" bg="secondary" rounded="md" shadow={3}>
+                    <Text className="font-global text-primary font-bold">
+                      New Promo
+                    </Text>
+                  </Center>
+                </Pressable>
               </VStack>
             </View>
           </>
@@ -248,13 +254,15 @@ const Home = ({navigation}) => {
                       style={{width: 180, height: 180, resizeMode: 'cover'}}
                       className="rounded-2xl"
                     />
-                    <Pressable
-                      onPress={() =>
-                        nav.navigate('EditProduct', {product_id: item.id})
-                      }
-                      className="rounded-full bg-primary absolute  w-[35] h-[35]  items-center justify-center -bottom-4 -right-4">
-                      <PenIcon width={13} height={13} />
-                    </Pressable>
+                    {isAdmin && (
+                      <Pressable
+                        onPress={() =>
+                          nav.navigate('EditProduct', {product_id: item.id})
+                        }
+                        className="rounded-full bg-primary absolute  w-[35] h-[35]  items-center justify-center -bottom-4 -right-4">
+                        <PenIcon width={13} height={13} />
+                      </Pressable>
+                    )}
                   </View>
                   <View className="bg-white items-center w-[220] h-[250] pt-36 pb-5 z-10  rounded-3xl gap-y-1  shadow-home-products justify-between">
                     <Text className="font-global text-black min-h-[] text-xl font-bold text-center max-w-[150]">
@@ -312,13 +320,15 @@ const Home = ({navigation}) => {
                       style={{width: 180, height: 180, resizeMode: 'cover'}}
                       className="rounded-2xl"
                     />
-                    <Pressable
-                      onPress={() =>
-                        nav.navigate('EditProduct', {product_id: item.id})
-                      }
-                      className="rounded-full bg-primary absolute  w-[35] h-[35]  items-center justify-center -bottom-4 -right-4">
-                      <PenIcon width={13} height={13} />
-                    </Pressable>
+                    {isAdmin && (
+                      <Pressable
+                        onPress={() =>
+                          nav.navigate('EditProduct', {product_id: item.id})
+                        }
+                        className="rounded-full bg-primary absolute  w-[35] h-[35]  items-center justify-center -bottom-4 -right-4">
+                        <PenIcon width={13} height={13} />
+                      </Pressable>
+                    )}
                   </View>
                   <View className="bg-white items-center w-[220px] h-[250] pt-36 pb-5 z-10  rounded-3xl gap-y-1  shadow-home-products justify-between">
                     <Text className="font-global text-black min-h-[] text-xl font-bold text-center max-w-[150]">

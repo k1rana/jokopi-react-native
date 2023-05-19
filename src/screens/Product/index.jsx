@@ -94,6 +94,7 @@ const ProductList = () => {
     )
       .then(result => {
         setIsLoading(false);
+        console.log(sort.orderBy);
         setList(result.data.data);
         const {totalPage, currentPage} = result.data.meta;
         setMeta({

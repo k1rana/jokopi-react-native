@@ -19,6 +19,7 @@ import securityIcon from './assets/icons/drawer/security.svg';
 import profilePlaceholder from './assets/images/profile-img-placeholder.png';
 import AdminDashboard from './screens/Admin';
 import ManageOrder from './screens/Admin/ManageOrder';
+import OrderDetail from './screens/Admin/OrderDetail';
 // import DrawerContent from './components/Drawer';
 import ForgotPass from './screens/Auth/ForgotPass';
 import Login from './screens/Auth/Login';
@@ -33,6 +34,9 @@ import EditProduct from './screens/Product/Edit';
 import Profile from './screens/Profile';
 import EditPassword from './screens/Profile/EditPassword';
 import History from './screens/Profile/History';
+import HistoryDetail from './screens/Profile/HistoryDetail';
+import CreatePromo from './screens/Promo/CreatePromo';
+import EditPromo from './screens/Promo/EditPromo';
 import DeliveryMethod from './screens/Transaction/DeliveryMethod';
 import Payment from './screens/Transaction/Payment';
 import Result from './screens/Transaction/Result';
@@ -304,6 +308,12 @@ const WelcomeStack = () => {
 
       <Screen name="AdminDashboard" component={AdminDashboard} />
       <Screen name="ManageOrder" component={ManageOrder} />
+      <Screen name="OrderDetail" component={OrderDetail} />
+
+      <Screen name="HistoryDetail" component={HistoryDetail} />
+
+      <Screen name="CreatePromo" component={CreatePromo} />
+      <Screen name="EditPromo" component={EditPromo} />
 
       <Screen name="Cart" component={Cart} />
       <Screen name="DeliveryMethod" component={DeliveryMethod} />
