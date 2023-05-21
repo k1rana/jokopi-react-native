@@ -1,9 +1,21 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
-import {Center, Fab, VStack} from 'native-base';
+import {
+  Center,
+  Fab,
+  VStack,
+} from 'native-base';
 import Modal from 'react-native-modal';
-import {useDispatch, useSelector} from 'react-redux';
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
 
+import messaging from '@react-native-firebase/messaging';
 import {useNavigation} from '@react-navigation/native';
 
 import BurgerIcon from '../../assets/icons/burger-drawer.svg';
@@ -17,6 +29,7 @@ import {priceActions} from '../../store/slices/price.slice';
 import {profileAction} from '../../store/slices/profile.slice';
 import {n_f} from '../../utils/helpers';
 import {logout} from '../../utils/https/auth';
+import {unlinkFcm} from '../../utils/https/fcm';
 import {getProducts} from '../../utils/https/product';
 import {
   ActivityIndicator,
@@ -58,6 +71,16 @@ const Home = ({navigation}) => {
   const [promoLoad, setPromoLoad] = useState(true);
   const [favoriteLoad, setFavLoad] = useState(true);
 
+  const unlinkFcmToken = async () => {
+    try {
+      const fcmToken = await messaging().getToken();
+      await unlinkFcm(fcmToken, auth.data.token, controller);
+      console.log('device successfully unlinked from user');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     if (!price.isFulfilled) {
       dispatch(priceActions.getPriceBySize(controller));
@@ -95,6 +118,7 @@ const Home = ({navigation}) => {
         console.log(err);
       })
       .finally(() => {
+        unlinkFcmToken();
         dispatch(authActions.reset());
         dispatch(profileAction.reset());
         setLogoutProc(false);
@@ -168,7 +192,7 @@ const Home = ({navigation}) => {
         {fab && (
           <>
             <Pressable
-              className="bg-black/40 z-30 absolute w-screen h-screen"
+              className="bg-black/40 z-30 absolute w-[9999] h-[9999]"
               onPress={() => setFab(false)}></Pressable>
             <View className="absolute z-40 bottom-2 left-28">
               <VStack space={4} alignItems="flex-start">

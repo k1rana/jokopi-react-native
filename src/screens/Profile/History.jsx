@@ -3,9 +3,10 @@ import React, {useEffect, useMemo, useState} from 'react';
 import _ from 'lodash';
 import {useSelector} from 'react-redux';
 
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 
 import BackIcon from '../../assets/icons/arrow-left-black.svg';
+import SwipeIcon from '../../assets/icons/swipe.svg';
 // import SwipeIcon from '../../assets/icons/swipe.svg';
 import HistoryIcon from '../../assets/illustrations/history.svg';
 import DetailActionSwipe from '../../components/DetailActionSwipe';
@@ -36,7 +37,8 @@ const History = () => {
     next: null,
   });
 
-  useEffect(() => {
+  const fetchData = async () => {
+    setIsLoading(true);
     getTransactionHistory(auth.data.token, controller)
       .then(result => {
         // console.log(result.data.data);
@@ -49,6 +51,16 @@ const History = () => {
       .finally(() => {
         setIsLoading(false);
       });
+  };
+  useFocusEffect(
+    React.useCallback(() => {
+      const unsubscribe = () => fetchData();
+
+      return () => unsubscribe();
+    }, []),
+  );
+  useEffect(() => {
+    fetchData();
   }, []);
   return (
     <View className="flex-1 bg-[#ECECEC]">
@@ -62,12 +74,12 @@ const History = () => {
 
         <Text></Text>
       </View>
-      {/* <View className="flex-row justify-center mb-3">
+      <View className="flex-row justify-center mb-3">
         <SwipeIcon />
         <Text className="ml-2 font-global text-black">
-          swipe on an item to delete
+          swipe on an item to see details
         </Text>
-      </View> */}
+      </View>
       {loading ? (
         <ActivityIndicator color="black" size="large" />
       ) : (

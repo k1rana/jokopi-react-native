@@ -1,7 +1,7 @@
 import React, {useEffect, useMemo, useState} from 'react';
 
 import _ from 'lodash';
-import {CheckIcon, Select, Skeleton} from 'native-base';
+import {Box, CheckIcon, Select, Skeleton, useToast} from 'native-base';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import Modal from 'react-native-modal';
 import {useSelector} from 'react-redux';
@@ -10,8 +10,13 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 
 import BackIcon from '../../assets/icons/arrow-left-black.svg';
 import PenIcon from '../../assets/icons/pen.svg';
+import DeleteIcon from '../../assets/icons/trash.svg';
 import productPlaceholder from '../../assets/images/product-placeholder.png';
-import {createProductEntry, getProductById} from '../../utils/https/product';
+import {
+  deleteProductEntry,
+  editProductEntry,
+  getProductById,
+} from '../../utils/https/product';
 import {
   ActivityIndicator,
   Image,
@@ -26,6 +31,7 @@ import {
 const EditProduct = () => {
   const auth = useSelector(state => state.auth);
   const profile = useSelector(state => state.profile);
+  const toast = useToast();
   const route = useRoute();
   const {product_id} = route.params;
 
@@ -46,6 +52,9 @@ const EditProduct = () => {
   const [isLoading, setLoading] = useState(false);
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
+
+  const [isDelete, setDelete] = useState(false);
+  const [isDeleteLoading, setDeleteLoading] = useState(false);
 
   const [form, setForm] = useState({
     name: '',
@@ -86,23 +95,13 @@ const EditProduct = () => {
     try {
       setLoading(true);
 
-      const result = await createProductEntry(
+      const result = await editProductEntry(
         form,
+        product_id,
         auth.data.token,
         controller,
       );
-      setForm({
-        name: '',
-        price: '',
-        category_id: 0,
-        desc: '',
-        image: {
-          uri: '',
-          type: '',
-          name: 'image.jpg',
-        },
-      });
-      setSuccess(result.data.data[0].id);
+      setSuccess(product_id);
       console.log('berhasil');
       await ImageCropPicker.clean();
     } catch (error) {
@@ -113,6 +112,40 @@ const EditProduct = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const deleteHandler = async () => {
+    setDeleteLoading(true);
+
+    deleteProductEntry(product_id, auth.data.token, controller)
+      .then(() => {
+        toast.show({
+          render: () => {
+            return (
+              <Box bg="emerald.500" px="2" py="1" rounded="sm" mb={5}>
+                Product deleted
+              </Box>
+            );
+          },
+        });
+        nav.navigate('Home');
+      })
+      .catch(err => {
+        console.log(err);
+        toast.show({
+          render: () => {
+            return (
+              <Box bg="red.500" px="2" py="1" rounded="sm" mb={5}>
+                An error ocurred
+              </Box>
+            );
+          },
+        });
+      })
+      .finally(() => {
+        setDelete(false);
+        setDeleteLoading(false);
+      });
   };
 
   const pickPhoto = () => {
@@ -182,6 +215,7 @@ const EditProduct = () => {
   ];
 
   const disabled =
+    isLoading ||
     form.category_id === '' ||
     form.name === '' ||
     form.price === '' ||
@@ -191,7 +225,6 @@ const EditProduct = () => {
       _.isEqual(form.category_id, data.category_id) &&
       _.isEqual(form.price, JSON.stringify(data.price)) &&
       _.isEqual(form.desc, data.desc));
-  isLoading;
 
   const modalResult = error !== '' || success !== '';
   const closeResult = () => {
@@ -218,20 +251,52 @@ const EditProduct = () => {
           </Pressable>
         </View>
       </Modal>
+      <Modal
+        isVisible={isDelete}
+        onBackdropPress={() => !isDeleteLoading && setDelete(false)}>
+        <View className="bg-white rounded-lg">
+          {isDeleteLoading ? (
+            <View className="py-4 flex-row items-center justify-center">
+              <ActivityIndicator color="black" />
+              <Text className="ml-2 font-global text-base font-semibold text-black">
+                Deleting
+              </Text>
+            </View>
+          ) : (
+            <>
+              <Text className="font-global text-black text-lg font-bold text-center py-4">
+                Do you want to delete this item?
+              </Text>
+              <View className="flex-row">
+                <Pressable
+                  className="flex-1 py-3 border-t border-r border-gray-300"
+                  onPress={deleteHandler}>
+                  <Text className="text-black text-center">Yes</Text>
+                </Pressable>
+                <Pressable
+                  className="flex-1 py-3 border-t border-gray-300"
+                  onPress={() => setDelete(false)}>
+                  <Text className="text-black text-center">No</Text>
+                </Pressable>
+              </View>
+            </>
+          )}
+        </View>
+      </Modal>
       <Modal isVisible={modalResult} onBackdropPress={closeResult}>
         <View className="bg-white rounded-lg">
           <Text className="font-global text-black text-lg font-bold text-center pt-4">
             {success !== '' ? 'Success' : 'Changes not saved'}
           </Text>
           <Text className="font-global text-black text-sm font-medium text-center pb-4 pt-2">
-            {success !== '' ? 'Product successfully added!' : error}
+            {success !== '' ? 'Product successfully updated!' : error}
           </Text>
           {success !== '' ? (
             <View className="flex-row">
               <Pressable
                 className="flex-1 py-4 border-t border-gray-300 font-medium border-r"
                 onPress={() => setSuccess('')}>
-                <Text className="text-black text-center">Add another</Text>
+                <Text className="text-black text-center">Continue edit</Text>
               </Pressable>
               <Pressable
                 className="flex-1 py-4 border-t border-gray-300 font-medium"
@@ -259,7 +324,9 @@ const EditProduct = () => {
             Edit Product
           </Text>
 
-          <Text></Text>
+          <Pressable onPress={() => setDelete(true)}>
+            <DeleteIcon />
+          </Pressable>
         </View>
         <ScrollView>
           <View className="items-center mt-5">

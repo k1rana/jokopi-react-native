@@ -1,13 +1,27 @@
 /* eslint-disable prettier/prettier */
-import React, {useEffect, useMemo} from 'react';
+import React, {
+  useEffect,
+  useMemo,
+} from 'react';
 
 import _ from 'lodash';
-import {extendTheme, NativeBaseProvider} from 'native-base';
-import {Provider, useDispatch, useSelector} from 'react-redux';
+import {
+  extendTheme,
+  NativeBaseProvider,
+} from 'native-base';
+import {
+  Provider,
+  useDispatch,
+  useSelector,
+} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 
+import messaging from '@react-native-firebase/messaging';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import {NavigationContainer, useNavigation} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  useNavigation,
+} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import ArrowIcon from './assets/icons/drawer/arrow.svg';
@@ -41,10 +55,17 @@ import DeliveryMethod from './screens/Transaction/DeliveryMethod';
 import Payment from './screens/Transaction/Payment';
 import Result from './screens/Transaction/Result';
 import Welcome from './screens/Welcome';
-import {persistor, store} from './store';
+import {
+  persistor,
+  store,
+} from './store';
 import {authActions} from './store/slices/auth.slice';
 import {profileAction} from './store/slices/profile.slice';
 import {logout} from './utils/https/auth';
+import {
+  linkFcm,
+  unlinkFcm,
+} from './utils/https/fcm';
 import {
   BaseButton,
   Image,
@@ -132,7 +153,7 @@ const DrawerContent = ({auth, profile}) => {
       <View className="bg-primary rounded-br-3xl items-center py-8">
         <Image
           source={
-            auth.data.isLogin && profile.data.img
+            auth.data.isLogin && profile?.data?.img
               ? {uri: profile.data.img}
               : profilePlaceholder
           }
@@ -260,21 +281,35 @@ function HomeDrawer() {
 const WelcomeStack = () => {
   const auth = useSelector(state => state.auth);
   const profile = useSelector(state => state.profile);
-  const controller = useMemo(() => new AbortController(), [auth.data.isLogin]);
+  const controller = useMemo(() => new AbortController(), []);
+
+  const linkFcmToken = async () => {
+    try {
+      const fcmToken = await messaging().getToken();
+      await linkFcm(fcmToken, auth.data.token, controller);
+      console.log('device successfully linked to user');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const unlinkFcmToken = async () => {
+    try {
+      const fcmToken = await messaging().getToken();
+      await unlinkFcm(fcmToken, auth.data.token, controller);
+      console.log('device successfully unlinked from user');
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const dispatch = useDispatch();
   useEffect(() => {
     if (auth.data.isLogin) {
-      // console.log(profile);
-      if (!profile.isFulfilled && !profile.isLoading && !profile.isRejected) {
-        dispatch(
-          profileAction.getProfileThunk({token: auth.data.token, controller}),
-        );
-      }
-
       if (auth.data.exp * 1000 < Date.now()) {
         dispatch(authActions.reset());
         dispatch(profileAction.reset());
+        unlinkFcmToken();
         logout(auth.data.token, controller)
           .then(result => {
             console.log('success logout');
@@ -283,6 +318,11 @@ const WelcomeStack = () => {
             console.log(err.response.data);
           });
       }
+      // console.log(profile);
+      dispatch(
+        profileAction.getProfileThunk({token: auth.data.token, controller}),
+      );
+      linkFcmToken();
     } else {
       if (profile.isFulfilled) {
         dispatch(profileAction.reset());

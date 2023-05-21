@@ -5,7 +5,7 @@ import 'react-native-gesture-handler';
 
 import {AppRegistry} from 'react-native';
 
-import notifee from '@notifee/react-native';
+import notifee, {AndroidStyle} from '@notifee/react-native';
 import messaging from '@react-native-firebase/messaging';
 
 import App from './App';
@@ -13,7 +13,8 @@ import {name as appName} from './app.json';
 
 async function onMessageReceived(message) {
   console.log('fcm payload', message);
-  const {android, title, subtitle, body} = message.notification;
+  const {notification, data} = message;
+  const {android, title, subtitle, body} = notification;
 
   const bodyRandom = [
     "Don't miss out on limited offers! Get our exclusive specialty coffee packs, including a wide selection of coffee variants, at a special price.",
@@ -27,12 +28,19 @@ async function onMessageReceived(message) {
   await notifee.displayNotification({
     android: {
       ...android,
-      channelId: android.channelId || 'general',
+      channelId: data.channel || android.channelId || 'general',
       smallIcon: 'ic_notification',
       largeIcon: 'ic_launcher',
+      timestamp: message.sentTime || Date.now(),
+      color: '#6A4029',
+      showTimestamp: true,
+      style: {
+        type: AndroidStyle.BIGTEXT,
+        text: body || bodyRandom[Math.floor(Math.random() * bodyRandom.length)],
+      },
     },
+    id: message.messageId,
     title: title || 'Hey Coffeeholic!',
-    subtitle: subtitle || undefined,
     body: body || bodyRandom[Math.floor(Math.random() * bodyRandom.length)],
   });
 }
