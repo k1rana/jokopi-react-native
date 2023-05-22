@@ -1,27 +1,14 @@
 /* eslint-disable prettier/prettier */
-import React, {
-  useEffect,
-  useMemo,
-} from 'react';
+import React, {useEffect, useMemo} from 'react';
 
 import _ from 'lodash';
-import {
-  extendTheme,
-  NativeBaseProvider,
-} from 'native-base';
-import {
-  Provider,
-  useDispatch,
-  useSelector,
-} from 'react-redux';
+import {extendTheme, NativeBaseProvider} from 'native-base';
+import {Provider, useDispatch, useSelector} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 
 import messaging from '@react-native-firebase/messaging';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import {
-  NavigationContainer,
-  useNavigation,
-} from '@react-navigation/native';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import ArrowIcon from './assets/icons/drawer/arrow.svg';
@@ -55,17 +42,11 @@ import DeliveryMethod from './screens/Transaction/DeliveryMethod';
 import Payment from './screens/Transaction/Payment';
 import Result from './screens/Transaction/Result';
 import Welcome from './screens/Welcome';
-import {
-  persistor,
-  store,
-} from './store';
+import {persistor, store} from './store';
 import {authActions} from './store/slices/auth.slice';
 import {profileAction} from './store/slices/profile.slice';
 import {logout} from './utils/https/auth';
-import {
-  linkFcm,
-  unlinkFcm,
-} from './utils/https/fcm';
+import {linkFcm, unlinkFcm} from './utils/https/fcm';
 import {
   BaseButton,
   Image,
@@ -297,10 +278,19 @@ const WelcomeStack = () => {
     try {
       const fcmToken = await messaging().getToken();
       await unlinkFcm(fcmToken, auth.data.token, controller);
-      console.log('device successfully unlinked from user');
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const logoutToken = () => {
+    logout(auth.data.token, controller)
+      .then(result => {
+        console.log('success logout');
+      })
+      .catch(err => {
+        console.log(err.response.data);
+      });
   };
 
   const dispatch = useDispatch();
@@ -309,13 +299,15 @@ const WelcomeStack = () => {
       if (auth.data.exp * 1000 < Date.now()) {
         dispatch(authActions.reset());
         dispatch(profileAction.reset());
-        unlinkFcmToken();
-        logout(auth.data.token, controller)
-          .then(result => {
-            console.log('success logout');
+        unlinkFcmToken()
+          .then(() => {
+            console.log('device successfully unlinked from user');
           })
           .catch(err => {
-            console.log(err.response.data);
+            console.log(err);
+          })
+          .finally(() => {
+            logoutToken();
           });
       }
       // console.log(profile);

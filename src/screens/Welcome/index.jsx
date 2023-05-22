@@ -11,7 +11,10 @@ const Welcome = () => {
   const navigation = useNavigation();
   const auth = useSelector(state => state.auth);
   if (auth.data.isLogin) {
-    navigation.navigate('HomeDrawer');
+    navigation.reset({
+      index: 0,
+      routes: [{name: 'HomeDrawer'}],
+    });
   }
 
   return (

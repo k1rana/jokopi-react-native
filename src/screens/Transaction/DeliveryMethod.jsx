@@ -31,7 +31,7 @@ const DeliveryMethod = () => {
   const controller = useMemo(() => new AbortController(), []);
 
   const [details, setDetails] = useState({
-    address: cart.delivery_address,
+    address: cart.delivery_address || profile.data.address,
     notes: cart.notes,
   });
 
@@ -96,12 +96,14 @@ const DeliveryMethod = () => {
             Address details
           </Text>
           <Pressable>
-            <Text className="font-global text-primary">change</Text>
+            {/* <Text className="font-global text-primary">change</Text> */}
           </Pressable>
         </View>
         <View className="bg-white rounded-2xl px-4 py-4">
           <TextInput
             value={details.address}
+            placeholder="Input address..."
+            placeholderTextColor={'#9A9A9D'}
             onChange={e =>
               setDetails({...details, address: e.nativeEvent.text})
             }
@@ -111,11 +113,15 @@ const DeliveryMethod = () => {
             multiline
             numberOfLines={2}
             value={details.notes}
+            placeholder="Any notes..."
+            placeholderTextColor={'#9A9A9D'}
             onChange={e => setDetails({...details, notes: e.nativeEvent.text})}
             className="font-global text-black py-1 text-base border-b border-[#BABABA]"
           />
           <TextInput
             value={profile.data.phone_number}
+            placeholder="Input receiver phone number..."
+            placeholderTextColor={'#9A9A9D'}
             className="font-global text-black py-1 text-base"
           />
         </View>
