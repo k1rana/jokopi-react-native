@@ -50,7 +50,7 @@ export const editProfile = (
 ) => {
   const body = new FormData();
   // append
-  console.log(image);
+  // console.log(image);
   if (image?.uri !== '') {
     body.append('image', image);
   }

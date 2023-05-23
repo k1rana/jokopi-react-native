@@ -1,6 +1,12 @@
-import React, {useMemo, useState} from 'react';
+import React, {
+  useMemo,
+  useState,
+} from 'react';
 
-import {CheckIcon, Select} from 'native-base';
+import {
+  CheckIcon,
+  Select,
+} from 'native-base';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import Modal from 'react-native-modal';
 import {useSelector} from 'react-redux';
@@ -11,6 +17,7 @@ import BackIcon from '../../assets/icons/arrow-left-black.svg';
 import PenIcon from '../../assets/icons/pen.svg';
 import productPlaceholder from '../../assets/images/product-placeholder.png';
 import {createProductEntry} from '../../utils/https/product';
+import imagePicker from '../../utils/imagePicker';
 import {
   ActivityIndicator,
   Image,
@@ -82,11 +89,7 @@ const CreatePromo = () => {
   };
 
   const pickPhoto = () => {
-    ImageCropPicker.openPicker({
-      width: 300,
-      height: 300,
-      cropping: true,
-    })
+    imagePicker.picker()
       .then(image => {
         setImage(image);
         setForm({
@@ -105,11 +108,7 @@ const CreatePromo = () => {
     setModalPfp(false);
   };
   const openCamera = () => {
-    ImageCropPicker.openCamera({
-      width: 300,
-      height: 300,
-      cropping: true,
-    })
+    imagePicker.camera()
       .then(image => {
         setImage(image);
         setForm({

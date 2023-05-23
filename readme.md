@@ -45,7 +45,7 @@ You can build it by yourself
 
 ## Technologies Used
 
-[![My Skills](https://skillicons.dev/icons?i=react,redux,firebase,babel)](https://skillicons.dev)
+[![My Skills](https://skillicons.dev/icons?i=react,redux,firebase,babel,tailwind)](https://skillicons.dev)
 
 - React Native
 - Redux & Redux Persist

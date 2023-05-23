@@ -17,6 +17,7 @@ import {
   editProductEntry,
   getProductById,
 } from '../../utils/https/product';
+import imagePicker from '../../utils/imagePicker';
 import {
   ActivityIndicator,
   Image,
@@ -149,11 +150,8 @@ const EditProduct = () => {
   };
 
   const pickPhoto = () => {
-    ImageCropPicker.openPicker({
-      width: 300,
-      height: 300,
-      cropping: true,
-    })
+    imagePicker
+      .picker()
       .then(image => {
         setImage(image);
         setForm({
@@ -172,11 +170,8 @@ const EditProduct = () => {
     setModalPfp(false);
   };
   const openCamera = () => {
-    ImageCropPicker.openCamera({
-      width: 300,
-      height: 300,
-      cropping: true,
-    })
+    imagePicker
+      .camera()
       .then(image => {
         setImage(image);
         setForm({

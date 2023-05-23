@@ -1,17 +1,11 @@
-import React, {
-  useMemo,
-  useState,
-} from 'react';
+import React, {useMemo, useState} from 'react';
 
 import _ from 'lodash';
 import {ToastAndroid} from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import Modal from 'react-native-modal';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {useNavigation} from '@react-navigation/native';
 
@@ -20,6 +14,7 @@ import CalendarIcon from '../../assets/icons/calendar.svg';
 import PenIcon from '../../assets/icons/pen.svg';
 import {profileAction} from '../../store/slices/profile.slice';
 import {editProfile} from '../../utils/https/auth';
+import imagePicker from '../../utils/imagePicker';
 import {
   ActivityIndicator,
   Image,
@@ -72,6 +67,7 @@ const Profile = () => {
         ToastAndroid.SHORT,
         ToastAndroid.CENTER,
       );
+      nav.navigate('Home');
     } catch (error) {
       console.log(error);
     } finally {
@@ -80,11 +76,8 @@ const Profile = () => {
   };
 
   const pickPhoto = () => {
-    ImageCropPicker.openPicker({
-      width: 300,
-      height: 300,
-      cropping: true,
-    })
+    imagePicker
+      .picker()
       .then(image => {
         setImage(image);
         setForm({
@@ -103,11 +96,8 @@ const Profile = () => {
     setModalPfp(false);
   };
   const openCamera = () => {
-    ImageCropPicker.openCamera({
-      width: 300,
-      height: 300,
-      cropping: true,
-    })
+    imagePicker
+      .camera()
       .then(image => {
         setImage(image);
         setForm({

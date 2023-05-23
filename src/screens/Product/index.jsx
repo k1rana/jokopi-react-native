@@ -8,6 +8,7 @@ import {useNavigation} from '@react-navigation/native';
 
 import BackIcon from '../../assets/icons/arrow-left-black.svg';
 import FilterIcon from '../../assets/icons/filter.svg';
+import NotFoundImg from '../../assets/illustrations/undraw_shopping_bags.svg';
 import productPlaceholder from '../../assets/images/product-placeholder.png';
 import {priceActions} from '../../store/slices/price.slice';
 import {n_f} from '../../utils/helpers';
@@ -94,7 +95,7 @@ const ProductList = () => {
     )
       .then(result => {
         setIsLoading(false);
-        console.log(sort.orderBy);
+        // console.log(sort.orderBy);
         setList(result.data.data);
         const {totalPage, currentPage} = result.data.meta;
         setMeta({
@@ -106,6 +107,10 @@ const ProductList = () => {
       })
       .catch(err => {
         setIsLoading(false);
+        if (err.response?.status === 404) {
+          setList([]);
+          setMeta({...initialValue, isEnd: true});
+        }
         console.log(err);
       });
   };
@@ -155,7 +160,7 @@ const ProductList = () => {
   );
   useEffect(() => {
     delayedSearch(searchTerm);
-    console.log(searchTerm);
+    // console.log(searchTerm);
   }, [searchTerm]);
   useEffect(() => {
     if (!price.isFulfilled) {
@@ -283,10 +288,18 @@ const ProductList = () => {
               numColumns={2}
               showsVerticalScrollIndicator={false}
               keyExtractor={(item, idx) => idx}
-              className="py-2"
+              className="flex-1 py-2"
+              ListEmptyComponent={() => (
+                <View className="flex-1 h-96 items-center justify-center">
+                  <NotFoundImg height={200} />
+                  <Text className="font-global text-black text-center mt-5 text-base font-medium">
+                    Product not found
+                  </Text>
+                </View>
+              )}
               onEndReachedThreshold={0.2}
               ListFooterComponent={() => (
-                <>
+                <View className={`${list.length < 1 && 'hidden'}`}>
                   {meta.moreLoading || meta.currentPage < meta.totalPage ? (
                     <Text className="font-global text-black text-center mt-2 mb-4">
                       Loading...
@@ -296,7 +309,7 @@ const ProductList = () => {
                       End of the page
                     </Text>
                   )}
-                </>
+                </View>
               )}
               onEndReached={loadMore}
               renderItem={list => (

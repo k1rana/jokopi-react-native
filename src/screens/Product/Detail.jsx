@@ -87,12 +87,7 @@ const ProductDetail = () => {
   };
 
   const disabled = !size || isLoading;
-  // const disabled = () => {
-  //   if (!size) return true;
-  //   if (isLoading) return true;
-  //   return false;
-  // };
-  //   console.log(windowHeight);
+
   return (
     <View className="flex-1 bg-primary-bold">
       <View className="px-10 py-6 flex-row justify-between items-center">
