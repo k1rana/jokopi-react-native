@@ -118,7 +118,7 @@ You need to install some software to run this project
 
 ## Screenshots
 
-<div align="center" style="display:flex;flex-wrap:wrap;gap:1rem">
+<div style="display:flex;flex-wrap:wrap;gap:1rem">
 <img width="200" src="./assets/screenshots/1.jpg"/>
 <img width="200" src="./assets/screenshots/2.jpg"/>
 <img width="200" src="./assets/screenshots/3.jpg"/>
