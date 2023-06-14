@@ -1,13 +1,16 @@
 <div align="center">
 <img src="./android/app/src/main/res/mipmap-xhdpi/ic_launcher_monochrome.png"/>
+
+[![React, Redux, Firebase, Babel, Tailwind](https://skillicons.dev/icons?i=react,redux,firebase,babel,tailwind)](#technologies-used)
+
 <h3 align="center"><b>jokopi</b> - Example App</h3>
    <p align="center">
    Open Source. Front-end.
    </p>
 
-[Demo](https://drive.google.com/drive/u/1/folders/1JdLrDwiry5stAuVvtPR7EjnrAaHu6NnK) · [Report Bug](#report-bug) · [Request Feature](#report-bug)
+[Demo](https://drive.google.com/drive/u/1/folders/1Ud3NtcSPVV-TicLSl6XzxEKUovHQHnCA) · [Report Bug](#report-bug) · [Request Feature](#report-bug)
 
-</div>
+</div><br>
 
 ## Table of Contents
 
@@ -44,8 +47,6 @@ You can build it by yourself
 
 ## Technologies Used
 
-![React, Redux, Firebase, Babel, Tailwind](https://skillicons.dev/icons?i=react,redux,firebase,babel,tailwind)
-
 - [React Native](https://reactnative.dev/)
 - [Redux](https://redux.js.org/) & [Redux Persist](https://www.npmjs.com/package/redux-persist)
 - [Async Storage](https://www.npmjs.com/package/@react-native-async-storage/async-storage)
@@ -65,9 +66,7 @@ You need to install some software to run this project
 - [NodeJS](https://nodejs.org/en/download) (LTS version recommended, 14 or newer)
 - [Android Studio](https://developer.android.com/studio)
 - [Java Development Kit](https://www.oracle.com/java/technologies/javase/jdk11-archive-downloads.html) (version 11 recommended)
-- [Watchman](https://facebook.github.io/watchman/docs/install/#buildinstall)
-- Android Emulator Device / Real Device
-- [See install guide...](https://reactnative.dev/docs/environment-setup?guide=native#installing-dependencies)
+- For more details, [see install guide...](https://reactnative.dev/docs/environment-setup?guide=native#installing-dependencies)
 
 ### Installation
 
@@ -126,6 +125,7 @@ You need to install some software to run this project
 <img width="200" src="./assets/screenshots/4.jpg"/>
 <img width="200" src="./assets/screenshots/5.jpg"/>
 </div>
+<br>
 
 Wanna see more? [click here](https://drive.google.com/drive/u/1/folders/12wzzTuKkkOxK_R8IFBLLNh1YBDJxfKdp)
 
